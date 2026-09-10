@@ -23,7 +23,7 @@
   "hero": {
     "overline": "Cairo · tonight",
     "headline": "Find the vibe for tonight",
-    "supporting": "See who's actually got a table free tonight, anywhere in Cairo, and book it. No deposit.",
+    "supporting": "See who's actually free tonight, anywhere in Cairo, and book it. No deposit.",
     "getApp": "Get the app",
     "partner": "Partner with SAHRA",
     "phone": {
@@ -47,7 +47,7 @@
     "diners": {
       "overline": "For diners",
       "title": "Somewhere good tonight, without the phone calls",
-      "line": "Tell us what you're after and we'll show you the one place that's free tonight. Booking takes about a minute.",
+      "line": "Tell us what you're after and we'll show you one place that's free tonight. Booking takes a minute, that's it.",
       "cta": "Get the app",
       "photo1": "Rooftop · Zamalek",
       "photo2": "Nile terrace",
@@ -56,7 +56,7 @@
     "restaurants": {
       "overline": "For restaurants",
       "title": "Run tonight's book from one screen",
-      "line": "One screen tells you who's actually sitting down tonight and who isn't. No phone calls.",
+      "line": "One screen shows you who's actually sitting down tonight and who isn't. You never touch the phone.",
       "row1Guest": "Mariam El-Sayed · 2",
       "row1Status": "Seated",
       "row2Guest": "Omar Adel · 4",
@@ -66,10 +66,10 @@
   },
   "how": {
     "title": "Three taps from \"where?\" to a table",
-    "lead": "From opening the app to a confirmed table, in about a minute.",
+    "lead": "From opening the app to a confirmed table: a minute, not more.",
     "step1": {
       "title": "Tell us the mood",
-      "body": "Say what you're in the mood for, where, and how many of you there are. We suggest one place, not a list of forty.",
+      "body": "Tell us the mood, where, and how many of you. We'll suggest one place, not a list of forty.",
       "screen": {
         "overline": "Tonight · Zamalek",
         "title": "What are you in the mood for?",
@@ -81,7 +81,7 @@
     },
     "step2": {
       "title": "See what's really free",
-      "body": "The times you see come straight from the restaurant's own book. If it says 9:00 is open, it's open.",
+      "body": "The times you see come straight from the restaurant's own book. If it says 9:00 is open, it's really open.",
       "screen": {
         "overline": "Layali Lounge",
         "title": "Tonight · 2 guests",
@@ -96,7 +96,7 @@
     },
     "step3": {
       "title": "Just show up",
-      "body": "Nothing to pay up front and nobody calls to confirm. Your booking sits in the app, with directions and a reminder before you go.",
+      "body": "No deposit, and nobody calls to confirm. Your booking lives in the app, with directions and a reminder before you go.",
       "screen": {
         "overline": "Confirmed",
         "title": "Table for 2 · 9:00 PM",
@@ -128,7 +128,7 @@
     },
     "f4": {
       "title": "Saved places",
-      "body": "Keep a list of places you keep meaning to try, sorted by neighbourhood."
+      "body": "Keep a list of the places you keep meaning to try, sorted by neighbourhood."
     },
     "f5": {
       "title": "Booking history",
@@ -161,8 +161,8 @@
   },
   "where": {
     "overline": "Where",
-    "title": "Cairo first, neighbourhood by neighbourhood",
-    "lead": "We start where the tables are, one neighbourhood at a time. Five districts so far.",
+    "title": "Cairo first, one neighbourhood at a time",
+    "lead": "We open where the tables are, one area after another. Five districts so far.",
     "zamalek": "Zamalek",
     "maadi": "Maadi",
     "heliopolis": "Heliopolis",
@@ -218,7 +218,7 @@
     },
     "q5": {
       "q": "I run a restaurant. How do I join?",
-      "a": "Tap Partner with SAHRA and we'll set your book up together. The restaurant side is launching with our first partners."
+      "a": "Tap \"Partner with SAHRA\" and we'll set your book up together. The restaurant side launches with our first partners."
     }
   },
   "close": {

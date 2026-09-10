@@ -148,16 +148,13 @@ export function Operator({ locale, copy, brand }: OperatorProps) {
                   <span className="w-12 shrink-0 font-display-script text-body-l font-semibold text-body">
                     {b.time}
                   </span>
-                  {/* The avatar and table code are the first to go on a narrow
-                      window (300–340px of usable width beside the floor's own
-                      padding) — without room to give up, the guest's name,
-                      the one thing worth reading here, was truncating to a
-                      single letter (found 2026-09-10). Status stays: it is
-                      the other half of the claim this preview makes. */}
-                  <span
-                    className="hidden size-8 shrink-0 rounded-pill bg-night-border sm:inline-block"
-                    aria-hidden="true"
-                  />
+                  {/* No avatar: a plain coloured circle with no guest photo behind
+                      it read as a broken image placeholder, not a design choice
+                      (reported 2026-09-10) — there is no photo for it to hold,
+                      here or anywhere a real guest's avatar would need one, so
+                      it is gone rather than faked. The table code is still the
+                      first to go on a narrow window, so the guest's name — the
+                      one thing worth reading here — keeps the room. */}
                   <span className="min-w-0 flex-1 truncate text-body-m font-semibold text-body">
                     {d[b.name]}
                   </span>
