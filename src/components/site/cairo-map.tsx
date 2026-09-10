@@ -17,12 +17,12 @@
 // a slow connection or with JavaScript off still sees a real (if simpler)
 // picture of where SAHRA is.
 //
-// COUNTS ARE NOT LIVE DATA. The five figures below (14, 9, 11…) are the
-// design's own — nothing today counts "venues live in Zamalek" anywhere in
-// the product, so these are placeholder figures on a placeholder feature,
-// carried the same way the venues band's borrowed names are: kept because the
-// owner asked for the design as drawn, flagged rather than hidden (decision
-// §8 — replace with a real count, or drop the count, before this is public).
+// NO COUNTS, unlike the export. It draws a second line under each name — "14
+// venues", "9 venues" — and nothing in the product counts venues by
+// neighbourhood, so those five figures were the design's invention carried on
+// a real-looking map. The owner had them removed (2026-09-11). A pin now says
+// where SAHRA is, which is true, and does not say how much, which nothing
+// here knows yet.
 //
 // NOT INTERACTIVE, ON PURPOSE. Panning, scroll-zoom and touch-zoom are all
 // off (matching the design): this is a picture that happens to be a real map,
@@ -38,11 +38,11 @@ export interface CairoMapProps {
 }
 
 const HOODS = [
-  { key: 'zamalek', lat: 30.0609, lng: 31.2197, count: 14 },
-  { key: 'maadi', lat: 29.9602, lng: 31.2569, count: 9 },
-  { key: 'heliopolis', lat: 30.0871, lng: 31.3284, count: 11 },
-  { key: 'newCairo', lat: 30.03, lng: 31.47, count: 16 },
-  { key: 'sheikhZayed', lat: 30.04, lng: 30.98, count: 7 },
+  { key: 'zamalek', lat: 30.0609, lng: 31.2197 },
+  { key: 'maadi', lat: 29.9602, lng: 31.2569 },
+  { key: 'heliopolis', lat: 30.0871, lng: 31.3284 },
+  { key: 'newCairo', lat: 30.03, lng: 31.47 },
+  { key: 'sheikhZayed', lat: 30.04, lng: 30.98 },
 ] as const;
 
 /** Escapes the handful of characters that matter inside a divIcon's HTML string. */
@@ -101,8 +101,7 @@ export function CairoMap({ locale, copy }: CairoMapProps) {
         const ll: [number, number] = [h.lat, h.lng];
         points.push(ll);
         const name = escapeHtml(copy[h.key]);
-        const count = `${h.count} ${escapeHtml(copy.venuesCount)}`;
-        const html = `<span class="map-pin"><span class="map-pin-dot"></span><span class="map-pin-ring"></span><span class="map-pin-ring"></span><span class="map-pin-label">${name}<small>${count}</small></span></span>`;
+        const html = `<span class="map-pin"><span class="map-pin-dot"></span><span class="map-pin-ring"></span><span class="map-pin-ring"></span><span class="map-pin-label">${name}</span></span>`;
         L.marker(ll, {
           icon: L.divIcon({ html, className: '', iconSize: [14, 14], iconAnchor: [7, 7] }),
           interactive: false,

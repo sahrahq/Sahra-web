@@ -117,15 +117,15 @@ for (const { locale, path, m } of LOCALES) {
       await expect(map).toHaveClass(/leaflet-container/, { timeout: 10_000 });
       const phone = testInfo.project.name === 'phone';
       for (const key of ['zamalek', 'maadi', 'heliopolis', 'newCairo', 'sheikhZayed'] as const) {
-        // Not `exact` here: a label's own text is the name immediately
-        // followed by its (unlabelled) count, e.g. "Zamalek14 venues" as one
-        // node — the count sits in a nested <small>, which an exact match
-        // against the name alone can never equal.
-        // Below md the map shows only pins — its labels are hidden by CSS
-        // (five fixed-width pills do not fit a ~380px strip), and the card's
-        // chips carry the five names there.
-        if (phone) await expect(map.getByText(m.where[key])).toBeAttached();
-        else await expect(map.getByText(m.where[key])).toBeVisible();
+        // A label is the name and nothing else — `exact` holds it to that, so
+        // the venue counts the export drew under each name (numbers nothing in
+        // the product can count, removed 2026-09-11) cannot come back by
+        // accident. Below md the map shows only pins — its labels are hidden
+        // by CSS (five fixed-width pills do not fit a ~380px strip), and the
+        // card's chips carry the five names there.
+        const label = map.getByText(m.where[key], { exact: true });
+        if (phone) await expect(label).toBeAttached();
+        else await expect(label).toBeVisible();
       }
 
       // Crediting OpenStreetMap is a condition of drawing its tiles, and the
@@ -151,7 +151,7 @@ for (const { locale, path, m } of LOCALES) {
         const band = (await map.boundingBox())!;
         const card = (await section.locator('[data-map-reserve]').boundingBox())!;
         for (const key of ['zamalek', 'maadi', 'heliopolis', 'newCairo', 'sheikhZayed'] as const) {
-          const label = (await map.getByText(m.where[key]).boundingBox())!;
+          const label = (await map.getByText(m.where[key], { exact: true }).boundingBox())!;
           expect(label.x, `${key}: the label starts inside the band`).toBeGreaterThanOrEqual(band.x - 1);
           expect(label.x + label.width, `${key}: the label ends inside the band`).toBeLessThanOrEqual(
             band.x + band.width + 1,

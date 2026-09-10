@@ -282,16 +282,21 @@
       opacity: 0;
     }
   }
+  /* One line, the name: the export's second line was a venue count nothing in
+     the product can count, and it is gone (cairo-map.tsx). The pill is
+     centred on its dot now that it is a single line, where the export
+     hung a two-line block from the dot's top. */
   .map-pin-label {
     position: absolute;
     inset-inline-start: 22px;
-    top: -7px;
+    top: 50%;
+    transform: translateY(-50%);
     white-space: nowrap;
     background: var(--sahra-night-raised);
     border: 1px solid var(--sahra-night-border);
     color: var(--sahra-night-text);
     border-radius: 999px;
-    padding: 5px 12px;
+    padding: 6px 14px;
     font: 600 14px/1.3 var(--sahra-font-display);
     letter-spacing: -0.01em;
     box-shadow: 0 8px 20px color-mix(in srgb, var(--sahra-night) 60%, transparent);
@@ -299,15 +304,6 @@
   [dir='rtl'] .map-pin-label {
     font-family: var(--sahra-font-arabic-display);
     letter-spacing: 0;
-  }
-  .map-pin-label small {
-    display: block;
-    font: 500 10px/1.2 var(--sahra-font-latin);
-    color: var(--sahra-night-text-faint);
-    letter-spacing: 0.04em;
-  }
-  [dir='rtl'] .map-pin-label small {
-    font-family: var(--sahra-font-arabic);
   }
   .map-vignette {
     position: absolute;

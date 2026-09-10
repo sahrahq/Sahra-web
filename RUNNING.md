@@ -197,6 +197,6 @@ decision 2026-09-10 §8: the store links (neither badge is a link until its
 listing exists), a partner contact channel (every "Join SAHRA" lands on the
 FAQ's joining answer), the legal text, real venue photography, the Flutter
 3.44.7 recapture of `public/shots/`, OG images, and the Phase 3 CI job. The
-"where" map draws OpenStreetMap's public tiles with the artboard's venue
-counts; a paid tile provider and real counts are launch items. `SAHRA for
+"where" map draws OpenStreetMap's public tiles, so a paid tile provider is a
+launch item (it also settles the map's label language). `SAHRA for
 Restaurants` is a drawn window because the app does not exist yet.
