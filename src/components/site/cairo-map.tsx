@@ -69,16 +69,28 @@ export function CairoMap({ locale, copy }: CairoMapProps) {
         boxZoom: false,
         keyboard: false,
         touchZoom: false,
-        attributionControl: true,
+        // No control of Leaflet's: it draws a white pill in the map's corner
+        // carrying the library's own credit and flag alongside the data's, and
+        // the owner asked twice for that corner to stop shouting. Crediting
+        // OpenStreetMap is a condition of drawing its tiles, so the credit
+        // does not go away — where.tsx renders it as a caption at the band's
+        // bottom edge, in the site's own type, which is what the ODbL asks of
+        // a map that is a picture rather than a tool.
+        attributionControl: false,
       });
-      // "© OpenStreetMap contributors" is a condition of using these tiles and
-      // stays (globals.css keeps it small and faint). Leaflet's own "Leaflet"
-      // credit and flag are not required by anything — they are the library
-      // advertising itself in the corner of the design, and the owner asked
-      // for them gone (2026-09-11).
-      map.attributionControl.setPrefix(false);
+      // OpenStreetMap's standard tiles. They render Egypt's place names in
+      // ARABIC whichever language the page is in, and the owner asked for a
+      // map that follows the site's language (2026-09-11). Every keyless way
+      // to fix that turned out not to exist any more, measured rather than
+      // assumed: CARTO's label-free basemaps now stamp "API KEY REQUIRED"
+      // across the tile, Wikimedia's international style answers 403 to
+      // anything that is not a Wikimedia project, and Stadia and MapTiler
+      // both need an account. The keyless remaining option, vector tiles
+      // (OpenFreeMap) rendered by MapLibre, costs ~220 kB of library plus
+      // ~250 kB per tile — the wrong trade for a decorative band on a phone.
+      // So the tiles stay as they are until the owner supplies a key
+      // (decision 2026-09-10 §8), which also buys a label-free style.
       const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors',
         maxZoom: 19,
         className: 'map-tiles',
       });

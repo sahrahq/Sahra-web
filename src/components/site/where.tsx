@@ -93,6 +93,16 @@ export function Where({ locale, copy }: WhereProps) {
         <Mashrabiya className="where-lattice text-body" opacity={0.035} />
         <div className="map-vignette" aria-hidden="true" />
       </div>
+      {/* Crediting OpenStreetMap is a condition of drawing its tiles, so this
+          line cannot go away while the band is a real map — but it does not
+          have to be a white pill bolted onto the map's corner (Leaflet's
+          control is off). It is a caption: the site's own smallest type, the
+          page's own gutter, on the band's bottom edge where the map has
+          already faded to Night, at the end side so it never meets the copy
+          card. Not a link, for the same reason no store badge is one. */}
+      <p className="pointer-events-none absolute inset-x-0 bottom-0 z-20 mx-auto w-full max-w-7xl px-6 pb-3 text-end text-overline text-faint md:px-16">
+        {copy.mapCredit}
+      </p>
     </section>
   );
 }

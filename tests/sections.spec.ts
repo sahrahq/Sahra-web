@@ -128,6 +128,12 @@ for (const { locale, path, m } of LOCALES) {
         else await expect(map.getByText(m.where[key])).toBeVisible();
       }
 
+      // Crediting OpenStreetMap is a condition of drawing its tiles, and the
+      // owner has twice asked for that corner of the map to be quieter — so
+      // the line that satisfies the licence is asserted here, to keep "make it
+      // quieter" from becoming "make it gone" in some later pass.
+      await expect(section.getByText(m.where.mapCredit)).toBeVisible();
+
       // The five names as chips on the copy card, at every width.
       const chips = section.locator('[data-map-reserve] ul');
       await expect(chips.getByRole('listitem')).toHaveCount(5);

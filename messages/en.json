@@ -169,7 +169,8 @@
     "newCairo": "New Cairo",
     "sheikhZayed": "Sheikh Zayed",
     "mapLabel": "A map of Cairo showing the neighbourhoods SAHRA covers",
-    "venuesCount": "venues"
+    "venuesCount": "venues",
+    "mapCredit": "© OpenStreetMap contributors"
   },
   "operator": {
     "overline": "SAHRA for restaurants",

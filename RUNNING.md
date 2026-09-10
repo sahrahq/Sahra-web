@@ -117,10 +117,12 @@ committed before the owner has seen 1280, 1440 and 380 in both languages.
 The "where" band is a live Leaflet map over OpenStreetMap tiles
 (`cairo-map.tsx`); `snap.ts` does not mock them, so screenshots need the
 network and cost a few tile fetches per page — fine for a review, not for a
-loop. Its `© OpenStreetMap contributors` line is a licence condition of
-drawing those tiles, not decoration: it is deliberately faint (`globals.css`,
-`.leaflet-control-attribution`) and must not be removed while the band draws
-OSM data. Leaflet's own credit is already off (`setPrefix(false)`).
+loop. The `where.mapCredit` caption at the band's bottom edge is a licence
+condition of drawing those tiles, not decoration: Leaflet's own attribution
+control is off, this line replaces it, and it must not be removed while the
+band draws OSM data. The tiles label Cairo in Arabic in both locales; a
+label-free or English basemap needs a provider key (decision §8) — every
+keyless one was checked on 2026-09-11 and none is left.
 
 ## 7. Product screenshots — `public/shots/`, captured, never drawn
 

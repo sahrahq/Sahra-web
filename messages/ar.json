@@ -169,7 +169,8 @@
     "newCairo": "القاهرة الجديدة",
     "sheikhZayed": "الشيخ زايد",
     "mapLabel": "خريطة القاهرة بتوضّح المناطق اللي سهرة فيها",
-    "venuesCount": "مكان"
+    "venuesCount": "مكان",
+    "mapCredit": "© مساهمو OpenStreetMap"
   },
   "operator": {
     "overline": "سهرة للمطاعم",

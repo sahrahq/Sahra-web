@@ -330,23 +330,9 @@
         color-mix(in srgb, var(--sahra-night) 85%, transparent) 100%
       );
   }
-  /* OpenStreetMap's credit is a condition of using its tiles, so it stays —
-     but as one faint line in the corner, no white pill and no Leaflet
-     branding (cairo-map.tsx drops the library's own prefix), because the
-     owner asked for that corner to stop shouting (2026-09-11). */
-  .leaflet-control-attribution {
-    background: none !important;
-    color: color-mix(in srgb, var(--sahra-night-text-faint) 55%, transparent) !important;
-    font:
-      500 9px/1.4 var(--sahra-font-latin),
-      sans-serif !important;
-    padding: 0 6px 2px !important;
-    box-shadow: none !important;
-  }
-  .leaflet-control-attribution a {
-    color: inherit !important;
-    text-decoration: none !important;
-  }
+  /* Leaflet's attribution control is off entirely (cairo-map.tsx); the data
+     credit it would have drawn is a caption in the band instead (where.tsx),
+     so there is no `.leaflet-control-*` to restyle here. */
 
   @media (min-width: 768px) {
     .mock-dash {
