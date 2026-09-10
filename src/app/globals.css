@@ -55,7 +55,13 @@
    classes, in px, with the phone width below 768 px beside each desktop value.
    Every COLOUR below is still a token, mixed with color-mix() for translucency. */
 @layer components {
-  /* Hero: the phone rises out of the band's bottom edge; the band crops it. */
+  /* Hero: the phone rises out of the band's bottom edge; the band crops it.
+     ONE height at every width — the phone itself is never scaled down (its
+     chip row is already close to full width at 340px; shrinking the phone
+     risked wrapping it), so a shorter mobile well was cropping noticeably
+     more of the SAME drawing away than the desktop one did (reported
+     2026-09-10: "not fully visible on mobile the way it is on the laptop").
+     Same crop, every width. */
   .hero-phone-well {
     height: 300px;
     overflow: hidden;
@@ -142,7 +148,14 @@
   .mock-card-photo {
     height: 150px;
   }
-  /* Get the app: only the top of the confirmation ticket shows, as in the artboard. */
+  /* Get the app: only the top of the confirmation ticket shows, as in the
+     artboard — desktop's 176px clears both of the phone's lines of text
+     ("Table for 2 · 9:00 PM", "Confirmed · Layali Lounge") with room to
+     spare. The mobile phone is smaller (see the scaled sizes below), but its
+     first 132px — matching the DESKTOP reveal's ratio exactly — cropped
+     right after the logo, before any of that text: the one thing the closer
+     band exists to show (reported 2026-09-10, "just a circle"). A matched
+     ratio is the wrong target here; matched CONTENT is. */
   .closer-phone-well {
     height: 176px;
   }
@@ -193,9 +206,6 @@
   }
 
   @media (max-width: 767px) {
-    .hero-phone-well {
-      height: 216px;
-    }
     .strip-a {
       height: 104px;
     }
@@ -213,12 +223,13 @@
       aspect-ratio: 1 / 1;
     }
     .closer-phone-well {
-      height: 132px;
+      height: 190px;
     }
     /* Scaled to ~75% of the desktop closer phone — see the note above the
-       desktop sizes. Radius and padding scale with it, at the SAME ratio as
-       the well above, so the corner is the same FRACTION of the reveal as on
-       a desktop, not a fixed px curve in a shorter window. */
+       desktop sizes. Radius and padding scale with it, so the corner is
+       still a phone's corner and not a fixed px curve on a smaller drawing;
+       the WELL above is deliberately taller than that same 75% ratio would
+       give, so both lines of text clear it, same as on a desktop. */
     .mock-phone-closer {
       width: 210px;
       height: 300px;

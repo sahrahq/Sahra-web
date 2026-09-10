@@ -4,6 +4,15 @@
 // does the page. The panel's geography is fixed LTR in both languages (the
 // artboard's own rule: Cairo does not mirror), so only its pin layer is forced
 // `dir="ltr"` and the label keeps the page's direction.
+//
+// PIN POSITIONS ARE THE ARTBOARD'S, PULLED IN FROM ITS EDGES. Centred with
+// `-translate-x-1/2`, a pin at 14% or 84% of a 1000px desktop panel has ~140px
+// of panel on its short side — plenty for its own pill. At 380px (a ~330px
+// panel after padding) the same 14% is one pin-width from the edge with no
+// spare width at all, and the westernmost and easternmost pins clipped
+// (reported 2026-09-10, "the map needs to look better"). Nudged in a few
+// points; still reads as the same rough arrangement, no pin closer than the
+// others to its edge.
 import { Mashrabiya } from '@/components/brand/mashrabiya';
 import type { Messages } from '@/i18n/messages';
 
@@ -11,13 +20,13 @@ export interface WhereProps {
   copy: Messages['where'];
 }
 
-/** Positions on the panel, as fractions of its width and height — the artboard's. */
+/** Positions on the panel, as fractions of its width and height. */
 const PINS = [
-  { key: 'zamalek', x: '38%', y: '40%' },
-  { key: 'maadi', x: '46%', y: '76%' },
-  { key: 'heliopolis', x: '70%', y: '26%' },
-  { key: 'newCairo', x: '84%', y: '58%' },
-  { key: 'sheikhZayed', x: '14%', y: '52%' },
+  { key: 'zamalek', x: '38%', y: '38%' },
+  { key: 'maadi', x: '46%', y: '78%' },
+  { key: 'heliopolis', x: '68%', y: '24%' },
+  { key: 'newCairo', x: '80%', y: '58%' },
+  { key: 'sheikhZayed', x: '20%', y: '54%' },
 ] as const;
 
 export function Where({ copy }: WhereProps) {
@@ -39,19 +48,24 @@ export function Where({ copy }: WhereProps) {
       </div>
       <div
         data-reveal
-        className="map-panel theme-night relative overflow-hidden rounded-xl bg-surface-page text-body md:col-span-7"
+        className="map-panel theme-night relative overflow-hidden rounded-xl bg-surface-page text-body shadow-2 ring-1 ring-night-border md:col-span-7"
       >
-        <Mashrabiya className="text-night-text" opacity={0.04} />
+        <Mashrabiya className="text-night-text" opacity={0.05} />
         <div className="map-glow absolute inset-0" aria-hidden="true" />
         <ul dir="ltr" className="absolute inset-0">
           {PINS.map((p) => (
             <li
               key={p.key}
               style={{ insetInlineStart: p.x, top: p.y }}
-              className="absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-pill border border-line bg-surface-card px-4 py-2 whitespace-nowrap"
+              className="absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-1 rounded-pill border border-line bg-surface-card px-3 py-1 shadow-1 whitespace-nowrap md:gap-2 md:px-4 md:py-2"
             >
-              <span className="size-2 rounded-pill bg-accent ring-4 ring-accent/25" aria-hidden="true" />
-              <span className="font-display-script text-body-l font-semibold text-body">{copy[p.key]}</span>
+              <span
+                className="size-2 shrink-0 rounded-pill bg-accent ring-4 ring-accent/25"
+                aria-hidden="true"
+              />
+              <span className="font-display-script text-body-m font-semibold text-body md:text-body-l">
+                {copy[p.key]}
+              </span>
             </li>
           ))}
         </ul>
