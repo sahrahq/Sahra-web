@@ -1,0 +1,242 @@
+@import 'tailwindcss';
+/* Generated from docs/design/tokens.json — resets Tailwind's defaults and maps
+   every token to a utility. Read tools/generate-tokens.ts before touching this. */
+@import '../styles/tokens.css';
+
+/* Base — the design package's styles.css, expressed in variables only. */
+@layer base {
+  html {
+    /* Anchor jumps (#diners, the skip link) stop one spacing step below the top. */
+    scroll-padding-top: var(--sahra-space-6);
+    background: var(--sahra-surface-page);
+    color: var(--sahra-text-body);
+    font-family: var(--sahra-font-latin);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* The Arabic pairing switches with the document language (HANDOFF.md). */
+  html[lang='ar'] {
+    font-family: var(--sahra-font-arabic);
+    line-height: var(--sahra-leading-arabic);
+  }
+
+  a {
+    color: var(--sahra-accent);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--sahra-accent-hover);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--sahra-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Reduced motion is a promise the CSS keeps even where GSAP is not loaded. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* GEOMETRY that is not a brand value. The landing is the owner's Claude Design
+   artboard (apps/web/claude design/, 1280 wide) made responsive. A phone
+   mock-up's visible height, a photo strip's stagger, a map panel's height are
+   compositions from that artboard, not tokens — so they live here as component
+   classes, in px, with the phone width below 768 px beside each desktop value.
+   Every COLOUR below is still a token, mixed with color-mix() for translucency. */
+@layer components {
+  /* Hero: the phone rises out of the band's bottom edge; the band crops it. */
+  .hero-phone-well {
+    height: 300px;
+    overflow: hidden;
+  }
+  /* How it works: a Night phone stands in a sunken card and is cut at its foot.
+     Same height on a phone: the 256 px frame is 410 px tall and 340 cut its head. */
+  .step-visual {
+    height: 420px;
+  }
+  /* Two audiences: three photos, staggered like a skyline. */
+  .strip-a {
+    height: 150px;
+  }
+  .strip-b {
+    height: 190px;
+  }
+  .strip-c {
+    height: 120px;
+  }
+  .venue-card {
+    aspect-ratio: 4 / 3;
+  }
+  .map-panel {
+    height: 360px;
+  }
+  /* For restaurants: the artboard's operator window, cut by the band. 340px
+     is the DESKTOP height, where the sidebar and floor aside are visible and
+     the middle column is exactly that tall in the artboard. Below md those two
+     asides are hidden and the middle column is the whole window — forcing it
+     to the same 340px there clipped and overlapped its own content (the KPI
+     grid drops to two rows, the title can wrap), found 2026-09-10. So the
+     height is natural (no rule) until md, and fixed only from md up. */
+  .mock-dash-side {
+    width: 180px;
+    flex: none;
+  }
+  .mock-dash-floor {
+    width: 210px;
+    flex: none;
+  }
+  /* The drawn phones: the artboard's three sizes, its radii, its bezels. */
+  .mock-phone {
+    max-width: 100%;
+    flex: none;
+  }
+  .mock-phone-hero {
+    width: 340px;
+    height: 720px;
+    padding: 12px;
+    border-radius: 48px;
+  }
+  .mock-phone-hero > .mock-screen {
+    border-radius: 38px;
+  }
+  .mock-phone-step {
+    width: 250px;
+    height: 400px;
+    padding: 10px 10px 0;
+    border-radius: 36px 36px 0 0;
+  }
+  .mock-phone-step > .mock-screen {
+    border-radius: 28px 28px 0 0;
+  }
+  .mock-phone-closer {
+    width: 280px;
+    height: 400px;
+    padding: 10px;
+    border-radius: 44px;
+  }
+  .mock-phone-closer > .mock-screen {
+    border-radius: 36px;
+  }
+  /* `max-width: 100%` (above) only ever makes a phone NARROWER than its own
+     drawing, never shorter. The closer phone is cropped by a well that DOES
+     shrink on a phone (176px → a shorter reveal below); its 400px height and
+     44px corner radius did not shrink with it, so the same corner was carved
+     out of a much shorter reveal — a 44px curve in a ~150px window reads as a
+     blob, not a phone edge (reported 2026-09-10). It scales down below md at
+     the SAME ratio its well does, so the fraction of the phone a reader sees,
+     and how big its corner looks against that fraction, stays the one the
+     artboard drew. The hero and step phones are not cropped this tightly
+     (their wells keep a taller fraction, or do not crop at all) and are left
+     at one size. */
+  .mock-card-photo {
+    height: 150px;
+  }
+  /* Get the app: only the top of the confirmation ticket shows, as in the artboard. */
+  .closer-phone-well {
+    height: 176px;
+  }
+  .closer-glow {
+    background: radial-gradient(
+      circle at 50% 100%,
+      color-mix(in srgb, var(--sahra-gold) 28%, transparent),
+      transparent 62%
+    );
+  }
+  .closer-phone {
+    box-shadow: 0 0 80px color-mix(in srgb, var(--sahra-gold) 35%, transparent);
+  }
+  /* A photo's caption sits on a Night shade so cream text clears AA on any picture. */
+  .photo-shade {
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--sahra-night) 65%, transparent),
+      transparent 55%
+    );
+  }
+  .photo-shade-strong {
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--sahra-night) 78%, transparent),
+      transparent 55%
+    );
+  }
+  .map-glow {
+    background: radial-gradient(
+      60% 60% at 50% 50%,
+      color-mix(in srgb, var(--sahra-terracotta) 18%, transparent),
+      transparent 70%
+    );
+  }
+  /* FAQ: <details> without the browser's triangle; the plus turns into a cross when open. */
+  .faq-q {
+    list-style: none;
+  }
+  .faq-q::-webkit-details-marker {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .mock-dash {
+      height: 340px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .hero-phone-well {
+      height: 216px;
+    }
+    .strip-a {
+      height: 104px;
+    }
+    .strip-b {
+      height: 132px;
+    }
+    .strip-c {
+      height: 84px;
+    }
+    .map-panel {
+      height: 280px;
+    }
+    /* Two-up on a phone, the 4:3 card is 125 px tall and the caption crowds it. */
+    .venue-card {
+      aspect-ratio: 1 / 1;
+    }
+    .closer-phone-well {
+      height: 132px;
+    }
+    /* Scaled to ~75% of the desktop closer phone — see the note above the
+       desktop sizes. Radius and padding scale with it, at the SAME ratio as
+       the well above, so the corner is the same FRACTION of the reveal as on
+       a desktop, not a fixed px curve in a shorter window. */
+    .mock-phone-closer {
+      width: 210px;
+      height: 300px;
+      padding: 8px;
+      border-radius: 33px;
+    }
+    .mock-phone-closer > .mock-screen {
+      border-radius: 27px;
+    }
+  }
+}
+
+@utility font-display-script {
+  /* Serif for Latin display, Reem Kufi for Arabic display — one utility, both scripts. */
+  font-family: var(--sahra-font-display);
+  html[lang='ar'] & {
+    font-family: var(--sahra-font-arabic-display);
+    line-height: var(--sahra-leading-arabic-display);
+    letter-spacing: 0;
+  }
+}

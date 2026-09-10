@@ -1,0 +1,10 @@
+# Generated — formatting it would make tokens:check report tampering.
+src/styles/tokens.css
+src/styles/tokens.ts
+# Build output
+.next
+out
+# Screenshots and binaries
+public/shots
+pnpm-lock.yaml
+src/components/brand/icon-paths.ts

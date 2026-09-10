@@ -1,0 +1,258 @@
+{
+  "brand": {
+    "name": "SAHRA",
+    "forRestaurants": "SAHRA for Restaurants",
+    "logoAlt": "The SAHRA mark, a crescent and a star cut into the letter S"
+  },
+  "meta": {
+    "title": "Find the vibe for tonight · SAHRA",
+    "description": "See which Cairo restaurants and lounges have a table free tonight and book it from the app. SAHRA is in Arabic and English."
+  },
+  "nav": {
+    "label": "Main",
+    "diners": "Diners",
+    "restaurants": "Restaurants",
+    "faq": "FAQ",
+    "getApp": "Get the app",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu",
+    "switchLocale": "عربي",
+    "switchLocaleLabel": "Read this page in Arabic",
+    "skipToContent": "Skip to content"
+  },
+  "hero": {
+    "overline": "Cairo · tonight",
+    "headline": "Find the vibe for tonight",
+    "supporting": "See who's actually got a table free tonight, anywhere in Cairo, and book it. No deposit.",
+    "getApp": "Get the app",
+    "partner": "Partner with SAHRA",
+    "phone": {
+      "greeting": "Good evening, Nour",
+      "location": "Zamalek, Cairo",
+      "chip1": "Tonight",
+      "chip2": "Rooftops",
+      "chip3": "Late",
+      "chip4": "Events",
+      "available": "Available tonight",
+      "seeAll": "See all",
+      "featured": "Featured",
+      "venue": "Layali Lounge",
+      "cuisine": "Levantine",
+      "slot": "2 · Tonight · 9:00 PM",
+      "book": "Book"
+    }
+  },
+  "audiences": {
+    "label": "Who SAHRA is for",
+    "diners": {
+      "overline": "For diners",
+      "title": "Somewhere good tonight, without the phone calls",
+      "line": "Tell us what you're after and we'll show you the one place that's free tonight. Booking takes about a minute.",
+      "cta": "Get the app",
+      "photo1": "Rooftop · Zamalek",
+      "photo2": "Nile terrace",
+      "photo3": "Late kitchen"
+    },
+    "restaurants": {
+      "overline": "For restaurants",
+      "title": "Run tonight's book from one screen",
+      "line": "One screen tells you who's actually sitting down tonight and who isn't. No phone calls.",
+      "row1Guest": "Mariam El-Sayed · 2",
+      "row1Status": "Seated",
+      "row2Guest": "Omar Adel · 4",
+      "row2Status": "Confirmed",
+      "cta": "Partner with SAHRA"
+    }
+  },
+  "how": {
+    "title": "Three taps from \"where?\" to a table",
+    "lead": "From opening the app to a confirmed table, in about a minute.",
+    "step1": {
+      "title": "Tell us the mood",
+      "body": "Say what you're in the mood for, where, and how many of you there are. We suggest one place, not a list of forty.",
+      "screen": {
+        "overline": "Tonight · Zamalek",
+        "title": "What are you in the mood for?",
+        "r1a": "Rooftops",
+        "r2a": "Late kitchens",
+        "r3a": "Live music",
+        "cta": "Show me tonight"
+      }
+    },
+    "step2": {
+      "title": "See what's really free",
+      "body": "The times you see come straight from the restaurant's own book. If it says 9:00 is open, it's open.",
+      "screen": {
+        "overline": "Layali Lounge",
+        "title": "Tonight · 2 guests",
+        "r1a": "8:30 PM",
+        "r1b": "Open",
+        "r2a": "9:00 PM",
+        "r2b": "Open",
+        "r3a": "9:30 PM",
+        "r3b": "Full",
+        "cta": "Book 9:00 PM"
+      }
+    },
+    "step3": {
+      "title": "Just show up",
+      "body": "Nothing to pay up front and nobody calls to confirm. Your booking sits in the app, with directions and a reminder before you go.",
+      "screen": {
+        "overline": "Confirmed",
+        "title": "Table for 2 · 9:00 PM",
+        "r1a": "Layali Lounge",
+        "r1b": "Zamalek",
+        "r2a": "Reservation",
+        "r2b": "SHR-4821",
+        "r3a": "Deposit",
+        "r3b": "None",
+        "cta": "Add to calendar"
+      }
+    }
+  },
+  "features": {
+    "overline": "In the app today",
+    "title": "What you get",
+    "lead": "Everything here is already live in the app.",
+    "f1": {
+      "title": "English and Arabic",
+      "body": "The whole app works in both. Switch any time."
+    },
+    "f2": {
+      "title": "Real availability",
+      "body": "What you see is the restaurant's real book, not a request that might get ignored."
+    },
+    "f3": {
+      "title": "Book without a deposit",
+      "body": "Hold a table with your phone number. Nothing gets charged."
+    },
+    "f4": {
+      "title": "Saved places",
+      "body": "Keep a list of places you keep meaning to try, sorted by neighbourhood."
+    },
+    "f5": {
+      "title": "Booking history",
+      "body": "Every past night in one place, so you remember what was good."
+    }
+  },
+  "venues": {
+    "overline": "Venues on SAHRA",
+    "v1": {
+      "name": "Layali Lounge",
+      "meta": "4.8 · Levantine · Zamalek"
+    },
+    "v2": {
+      "name": "Sequoia",
+      "meta": "4.6 · Mediterranean · Zamalek"
+    },
+    "v3": {
+      "name": "Zooba",
+      "meta": "4.7 · Egyptian · Downtown"
+    },
+    "v4": {
+      "name": "Kazoku",
+      "meta": "4.9 · Japanese · Maadi"
+    },
+    "v5": "Sachi",
+    "v6": "Crimson",
+    "v7": "Pier 88",
+    "v8": "Abou El Sid",
+    "more": "New places join every week."
+  },
+  "where": {
+    "overline": "Where",
+    "title": "Cairo first, neighbourhood by neighbourhood",
+    "lead": "We start where the tables are, one neighbourhood at a time. Five districts so far.",
+    "zamalek": "Zamalek",
+    "maadi": "Maadi",
+    "heliopolis": "Heliopolis",
+    "newCairo": "New Cairo",
+    "sheikhZayed": "Sheikh Zayed",
+    "mapLabel": "Cairo · map placeholder"
+  },
+  "operator": {
+    "overline": "SAHRA for restaurants",
+    "title": "Fill the room on a Tuesday, keep it calm on a Friday",
+    "lead": "Tonight's bookings, your floor and your guests' notes, on one screen. We're building it with restaurant teams in Cairo now, and launching with the first ones who join.",
+    "cta": "Partner with SAHRA",
+    "dash": {
+      "forRest": "For restaurants",
+      "sbTonight": "Tonight",
+      "sbFloor": "Floor plan",
+      "sbGuests": "Guests",
+      "sbReviews": "Reviews",
+      "sbMenu": "Menu",
+      "title": "Layali Lounge · tonight",
+      "sub": "Wednesday 21 · service 6:00 PM to 2:00 AM",
+      "walkIn": "+ Walk-in",
+      "k1": "Covers booked",
+      "k2": "Occupancy",
+      "k3": "Seated now",
+      "k4": "No-shows",
+      "b1Name": "Mariam El-Sayed",
+      "b1Status": "Seated",
+      "b2Name": "Omar Adel",
+      "b2Status": "Confirmed",
+      "b3Name": "Khaled Mostafa",
+      "b3Status": "Running late",
+      "floorLabel": "Floor · main room"
+    }
+  },
+  "faq": {
+    "title": "Questions people ask before their first booking",
+    "q1": {
+      "q": "Do I pay anything to book?",
+      "a": "No. Your phone number is all it takes to hold a table. The only thing with a price is a ticketed event, and you see that before you confirm."
+    },
+    "q2": {
+      "q": "Is the availability real?",
+      "a": "Yes. What you see is what the restaurant has open right now, straight from their book. If 9:00 PM shows as free, it's free."
+    },
+    "q3": {
+      "q": "Can I use it in Arabic?",
+      "a": "Yes, all of it. Every screen is in Arabic too, laid out right to left, and you can switch whenever you want."
+    },
+    "q4": {
+      "q": "Which parts of Cairo are covered?",
+      "a": "Right now, Zamalek, Maadi, Heliopolis, New Cairo and Sheikh Zayed. More neighbourhoods open as places sign up."
+    },
+    "q5": {
+      "q": "I run a restaurant. How do I join?",
+      "a": "Tap Partner with SAHRA and we'll set your book up together. The restaurant side is launching with our first partners."
+    }
+  },
+  "close": {
+    "overline": "Tonight is a good night",
+    "title": "Your table's waiting",
+    "lead": "Free on iPhone and Android. English and Arabic.",
+    "appStoreTop": "Download on the",
+    "appStoreName": "App Store",
+    "playTop": "Get it on",
+    "playName": "Google Play",
+    "phone1": "Table for 2 · 9:00 PM",
+    "phone2": "Confirmed · Layali Lounge"
+  },
+  "footer": {
+    "label": "Footer",
+    "tagline": "Find the vibe for tonight. Cairo, 2026.",
+    "how": "How it works",
+    "hoods": "Neighbourhoods",
+    "operator": "Operator preview",
+    "company": "Company",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "legal": {
+    "back": "Back to SAHRA",
+    "privacy": {
+      "metaTitle": "Privacy · SAHRA",
+      "title": "Privacy",
+      "body": "We're still writing SAHRA's privacy policy. It will be here before the app is in the stores, and it will only describe what the app actually does with your data."
+    },
+    "terms": {
+      "metaTitle": "Terms · SAHRA",
+      "title": "Terms",
+      "body": "We're still writing SAHRA's terms of use. They will be here before the app is in the stores."
+    }
+  }
+}
