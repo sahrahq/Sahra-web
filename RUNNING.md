@@ -44,6 +44,13 @@ re-run with `pnpm exec playwright test --workers=4` (or lower) before
 treating any of them as real — CI sets its own worker count and is not
 affected by this.
 
+Every spec imports `test`/`expect` from `tests/fixtures.ts`, not from
+`@playwright/test`: the fixture answers every `tile.openstreetmap.org` request
+with a 1×1 PNG, so a run of ~200 page loads never asks the volunteer tile
+servers for anything, and the map test asserts Leaflet's container and the
+five markers, never pixels. A new spec that imports Playwright directly would
+quietly start fetching real tiles.
+
 Never read `$?` after piping into `tail`. Redirect to a file and read the
 command's own exit code (ENGINEERING-STANDARDS, incident 6).
 
@@ -106,6 +113,11 @@ adds one PNG per band (`root--1280--hero.png`, `ar--380--faq.png`…) so a revie
 looks at one thing at a time; `--open-menu` adds the phone with its menu open.
 `.snaps/` is gitignored. Every "done" in a report links these — nothing is
 committed before the owner has seen 1280, 1440 and 380 in both languages.
+
+The "where" band is a live Leaflet map over OpenStreetMap tiles
+(`cairo-map.tsx`); `snap.ts` does not mock them, so screenshots need the
+network and cost a few tile fetches per page — fine for a review, not for a
+loop.
 
 ## 7. Product screenshots — `public/shots/`, captured, never drawn
 
@@ -176,9 +188,10 @@ stay in the repo, unused — decision §6 says why and what would bring them bac
 
 The landing is whole — the owner's artboard, all ten bands, both languages,
 with `/privacy` and `/terms` as honest stubs. Still missing, all tracked in
-decision 2026-09-10 §8: the Play Store link (the badge is not a link until it
-exists), a partner contact channel (every "Partner with SAHRA" lands on the
+decision 2026-09-10 §8: the store links (neither badge is a link until its
+listing exists), a partner contact channel (every "Join SAHRA" lands on the
 FAQ's joining answer), the legal text, real venue photography, the Flutter
-3.44.7 recapture of `public/shots/`, OG images, and the Phase 3 CI job.
-`SAHRA for Restaurants` is shown as a labelled preview render because the app
-does not exist yet.
+3.44.7 recapture of `public/shots/`, OG images, and the Phase 3 CI job. The
+"where" map draws OpenStreetMap's public tiles with the artboard's venue
+counts; a paid tile provider and real counts are launch items. `SAHRA for
+Restaurants` is a drawn window because the app does not exist yet.

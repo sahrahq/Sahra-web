@@ -1,7 +1,7 @@
 // §4 — how it works, in both locales: three steps, each with the artboard's
 // drawn Night screen standing in a sunken card, plus the number, title and
 // line under it. No product capture: the owner asked for the drawing.
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 import ar from '../messages/ar.json' with { type: 'json' };
 import en from '../messages/en.json' with { type: 'json' };
 

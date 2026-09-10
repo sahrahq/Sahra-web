@@ -3,7 +3,7 @@
 // Copy is read from the message files, never typed here: a test that hardcodes
 // "Diners" breaks every time the (unreviewed) copy is edited, and its job is to
 // outlive that. Direction and the language switch are asserted from the DOM.
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 import ar from '../messages/ar.json' with { type: 'json' };
 import en from '../messages/en.json' with { type: 'json' };
 

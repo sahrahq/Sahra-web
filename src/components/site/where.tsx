@@ -1,26 +1,24 @@
-// Section 7 — where: 5:7, copy at the start, a Night panel with the lattice, a
-// terracotta glow and the artboard's five neighbourhoods pinned at roughly
-// their places on a Cairo map. The artboard labels it a map placeholder and so
-// does the page. The panel's geography is fixed LTR in both languages (the
-// artboard's own rule: Cairo does not mirror), so only its pin layer is forced
-// `dir="ltr"` and the label keeps the page's direction.
-//
-// PIN POSITIONS ARE THE ARTBOARD'S, PULLED IN FROM ITS EDGES. Centred with
-// `-translate-x-1/2`, a pin at 14% or 84% of a 1000px desktop panel has ~140px
-// of panel on its short side — plenty for its own pill. At 380px (a ~330px
-// panel after padding) the same 14% is one pin-width from the edge with no
-// spare width at all, and the westernmost and easternmost pins clipped
-// (reported 2026-09-10, "the map needs to look better"). Nudged in a few
-// points; still reads as the same rough arrangement, no pin closer than the
-// others to its edge.
+// Section 7 — where: 5:7, copy at the start, and the real Cairo map from the
+// owner's second Claude Design export ("SAHRA Cairo Map") — real OpenStreetMap
+// tiles retinted into SAHRA Night, the same five neighbourhoods pinned at
+// their real coordinates (cairo-map.tsx). Loaded lazily, client-only, since
+// it is a live map and real weight; this file keeps rendering the ORIGINAL
+// schematic panel underneath it as the static fallback — what a reader with
+// JavaScript off, or before the map has mounted, sees instead. The panel's
+// geography stays fixed LTR either way (the design's own rule: Cairo does not
+// mirror), so only the pin/label layer is forced `dir="ltr"`.
 import { Mashrabiya } from '@/components/brand/mashrabiya';
+import { CairoMapGate } from '@/components/site/cairo-map-gate';
+import { MapLegend } from '@/components/site/map-legend';
+import type { Locale } from '@/i18n/locales';
 import type { Messages } from '@/i18n/messages';
 
 export interface WhereProps {
+  locale: Locale;
   copy: Messages['where'];
 }
 
-/** Positions on the panel, as fractions of its width and height. */
+/** Positions on the FALLBACK panel, as fractions of its width and height. */
 const PINS = [
   { key: 'zamalek', x: '38%', y: '38%' },
   { key: 'maadi', x: '46%', y: '78%' },
@@ -29,7 +27,7 @@ const PINS = [
   { key: 'sheikhZayed', x: '20%', y: '54%' },
 ] as const;
 
-export function Where({ copy }: WhereProps) {
+export function Where({ locale, copy }: WhereProps) {
   return (
     <section
       id="where"
@@ -46,32 +44,38 @@ export function Where({ copy }: WhereProps) {
         </h2>
         <p className="mt-4 text-body-l leading-normal text-pretty text-soft">{copy.lead}</p>
       </div>
-      <div
-        data-reveal
-        className="map-panel theme-night relative overflow-hidden rounded-xl bg-surface-page text-body shadow-2 ring-1 ring-night-border md:col-span-7"
-      >
-        <Mashrabiya className="text-night-text" opacity={0.05} />
-        <div className="map-glow absolute inset-0" aria-hidden="true" />
-        <ul dir="ltr" className="absolute inset-0">
-          {PINS.map((p) => (
-            <li
-              key={p.key}
-              style={{ insetInlineStart: p.x, top: p.y }}
-              className="absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-1 rounded-pill border border-line bg-surface-card px-3 py-1 shadow-1 whitespace-nowrap md:gap-2 md:px-4 md:py-2"
-            >
-              <span
-                className="size-2 shrink-0 rounded-pill bg-accent ring-4 ring-accent/25"
-                aria-hidden="true"
-              />
-              <span className="font-display-script text-body-m font-semibold text-body md:text-body-l">
-                {copy[p.key]}
-              </span>
-            </li>
-          ))}
-        </ul>
-        <p className="absolute start-4 bottom-3 text-caption uppercase tracking-overline text-faint">
-          {copy.mapLabel}
-        </p>
+      <div className="md:col-span-7">
+        <div
+          data-reveal
+          className="map-panel theme-night relative overflow-hidden rounded-xl bg-surface-page text-body shadow-2 ring-1 ring-night-border"
+        >
+          {/* The static fallback: shown until the real map mounts, or always,
+              without JavaScript. The map (below) covers it once it is ready. */}
+          <Mashrabiya className="text-night-text" opacity={0.05} />
+          <div className="map-glow absolute inset-0" aria-hidden="true" />
+          <ul dir="ltr" className="absolute inset-0">
+            {PINS.map((p) => (
+              <li
+                key={p.key}
+                style={{ insetInlineStart: p.x, top: p.y }}
+                className="absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-1 rounded-pill border border-line bg-surface-card px-3 py-1 shadow-1 whitespace-nowrap md:gap-2 md:px-4 md:py-2"
+              >
+                <span
+                  className="size-2 shrink-0 rounded-pill bg-accent ring-4 ring-accent/25"
+                  aria-hidden="true"
+                />
+                <span className="font-display-script text-body-m font-semibold text-body md:text-body-l">
+                  {copy[p.key]}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <CairoMapGate locale={locale} copy={copy} />
+        </div>
+        {/* Below md the map itself only shows dots (globals.css hides its
+            labels there — five fixed-width pills do not fit a ~330px-wide
+            panel without overlapping); their names are listed here instead. */}
+        <MapLegend copy={copy} />
       </div>
     </section>
   );

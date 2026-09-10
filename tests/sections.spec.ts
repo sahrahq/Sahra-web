@@ -4,7 +4,8 @@
 // Alongside "is it there", the pins that keep the page honest about what it
 // is: the store badges are not links until the listings exist (never `#`), the
 // drawn screens carry the message files' strings, every photo has pixels.
-import { expect, test, type Locator } from '@playwright/test';
+import { expect, test } from './fixtures';
+import type { Locator } from '@playwright/test';
 import ar from '../messages/ar.json' with { type: 'json' };
 import en from '../messages/en.json' with { type: 'json' };
 import { contrast } from './helpers/contrast';
@@ -25,10 +26,18 @@ const LOCALES = [
  * all (found 2026-09-10; the same gap hid a whole card from a role query on
  * `features`, and the restaurants half of §3 from one on `two-audiences`).
  * Scrolling the LAST `[data-reveal]` descendant into view crosses every
- * trigger above it too.
+ * trigger above it too — to the CENTRE of the viewport, not merely into it:
+ * `scrollIntoViewIfNeeded` on an element already peeking in at the bottom
+ * scrolls the least it can, which leaves that element's top a few pixels
+ * either side of the 88% line (found 2026-09-11: the fifth feature card, 102px
+ * tall in Arabic, landed at 86.5% — past the line by layout, and not past it
+ * at all once the module had measured it with its own 24px offset applied).
  */
 async function revealAll(section: Locator) {
-  await section.locator('[data-reveal]').last().scrollIntoViewIfNeeded();
+  await section
+    .locator('[data-reveal]')
+    .last()
+    .evaluate((el) => el.scrollIntoView({ block: 'center' }));
 }
 
 for (const { locale, path, m } of LOCALES) {
@@ -75,20 +84,56 @@ for (const { locale, path, m } of LOCALES) {
       }
     });
 
-    test('where: the five neighbourhoods pinned on a Night panel that never mirrors', async ({ page }) => {
+    test('where: the five neighbourhoods pinned on a Night panel that never mirrors', async ({
+      page,
+    }, testInfo) => {
       const section = page.locator('#where');
       await section.scrollIntoViewIfNeeded();
       await revealAll(section);
       await expect(section.getByRole('heading', { level: 2, name: m.where.title })).toBeVisible();
-      await expect(section.getByRole('listitem')).toHaveCount(5);
+      // The static fallback panel — always in the DOM, covered once the real
+      // map mounts (never removed, so a no-JS reader still gets a real
+      // picture). Its own list, scoped: the mobile legend below repeats the
+      // same five names, and the real map's labels do too.
+      const fallback = section.locator('ul[dir="ltr"]');
+      await expect(fallback.getByRole('listitem')).toHaveCount(5);
       for (const key of ['zamalek', 'maadi', 'heliopolis', 'newCairo', 'sheikhZayed'] as const) {
-        await expect(section.getByText(m.where[key], { exact: true })).toBeAttached();
+        await expect(fallback.getByText(m.where[key], { exact: true })).toBeAttached();
       }
-      await expect(section.getByText(m.where.mapLabel)).toBeAttached();
       // Geography is fixed: Sheikh Zayed is west of Zamalek, which is west of New Cairo, in both languages.
-      const x = async (name: string) => (await section.getByText(name, { exact: true }).boundingBox())!.x;
+      const x = async (name: string) => (await fallback.getByText(name, { exact: true }).boundingBox())!.x;
       expect(await x(m.where.sheikhZayed)).toBeLessThan(await x(m.where.zamalek));
       expect(await x(m.where.zamalek)).toBeLessThan(await x(m.where.newCairo));
+
+      // The real map (cairo-map.tsx): a lazy chunk, so give it a moment to
+      // mount. Its own tile requests are mocked (tests/fixtures.ts) — this
+      // only asserts the map's structure (Leaflet's container, the five
+      // divIcon markers with their names and counts), never a tile image.
+      const map = section.locator('[role="img"]');
+      await expect(map).toHaveAttribute('aria-label', m.where.mapLabel, { timeout: 10_000 });
+      // Leaflet adds its own class to the SAME element it was given, not to a
+      // child — a descendant search for it always finds zero (found chasing
+      // this test's own false failure, not a product bug).
+      await expect(map).toHaveClass(/leaflet-container/, { timeout: 10_000 });
+      const phone = testInfo.project.name === 'phone';
+      for (const key of ['zamalek', 'maadi', 'heliopolis', 'newCairo', 'sheikhZayed'] as const) {
+        // Not `exact` here: a label's own text is the name immediately
+        // followed by its (unlabelled) count, e.g. "Zamalek14 venues" as one
+        // node — the count sits in a nested <small>, which an exact match
+        // against the name alone can never equal.
+        // Below md the map shows only pins — its labels are hidden by CSS
+        // (five fixed-width pills do not fit a ~330px panel), and the same
+        // five names are listed as plain chips under the panel instead.
+        if (phone) await expect(map.getByText(m.where[key])).toBeAttached();
+        else await expect(map.getByText(m.where[key])).toBeVisible();
+      }
+      if (phone) {
+        const legend = section.locator('ul').last();
+        await expect(legend.getByRole('listitem')).toHaveCount(5);
+        for (const key of ['zamalek', 'maadi', 'heliopolis', 'newCairo', 'sheikhZayed'] as const) {
+          await expect(legend.getByText(m.where[key], { exact: true })).toBeVisible();
+        }
+      }
     });
 
     test('for restaurants: Night band, 48px headline on a desktop, the drawn operator window, CTA to the joining answer', async ({

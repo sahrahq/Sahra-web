@@ -40,7 +40,7 @@ export function Landing({ locale }: { locale: Locale }) {
         <HowItWorks copy={m.how} />
         <Features copy={m.features} />
         <Venues copy={m.venues} />
-        <Where copy={m.where} />
+        <Where locale={locale} copy={m.where} />
         <Operator locale={locale} copy={m.operator} brand={m.brand.name} />
         <Faq copy={m.faq} />
         <GetTheApp copy={m.close} />

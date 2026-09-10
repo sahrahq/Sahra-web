@@ -6,7 +6,7 @@
 // its text clears AA against it, computed in the browser from the painted
 // values. A `theme-night` class that stopped resolving would still be in the
 // markup; it would not survive this.
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 import ar from '../messages/ar.json' with { type: 'json' };
 import en from '../messages/en.json' with { type: 'json' };
 import { contrast } from './helpers/contrast';

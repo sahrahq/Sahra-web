@@ -199,6 +199,106 @@
     display: none;
   }
 
+  /* The Cairo map (cairo-map.tsx): a real Leaflet map over real OpenStreetMap
+     tiles, retinted into SAHRA Night, from the owner's second Claude Design
+     export. Named classes, not Tailwind utilities, because Leaflet inserts a
+     marker's HTML as a raw string (`L.divIcon({ html })`), which cannot carry
+     Tailwind's arbitrary-value or colour-literal restrictions the way JSX
+     can — every colour below is still a token, via var()/color-mix(), same as
+     everywhere else on this site; it is only read from CSS instead of from a
+     className string, since that is what the lint rule that would otherwise
+     catch a stray literal actually scans (.tsx source, not .css). */
+  .map-tiles {
+    filter: invert(1) hue-rotate(185deg) brightness(0.5) sepia(0.75) saturate(1.05) contrast(1.15);
+    opacity: 0.9;
+  }
+  .map-pin {
+    position: relative;
+    display: block;
+    width: 14px;
+    height: 14px;
+  }
+  .map-pin-dot {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: var(--sahra-terracotta);
+    box-shadow:
+      0 0 0 3px var(--sahra-night),
+      0 0 0 4px color-mix(in srgb, var(--sahra-terracotta) 60%, transparent);
+  }
+  /* Two rings, the second delayed half a cycle, so the pulse never fully stops —
+     collapsed to a single still frame under prefers-reduced-motion by the
+     blanket rule at the top of this file (animation-duration: 0.01ms). */
+  .map-pin-ring {
+    position: absolute;
+    inset: -10px;
+    border-radius: 999px;
+    border: 1.5px solid color-mix(in srgb, var(--sahra-terracotta) 55%, transparent);
+    animation: map-pin-pulse 2.6s ease-out infinite;
+  }
+  .map-pin-ring:nth-child(3) {
+    animation-delay: 1.3s;
+  }
+  @keyframes map-pin-pulse {
+    0% {
+      transform: scale(0.4);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(1.9);
+      opacity: 0;
+    }
+  }
+  .map-pin-label {
+    position: absolute;
+    inset-inline-start: 22px;
+    top: -7px;
+    white-space: nowrap;
+    background: var(--sahra-night-raised);
+    border: 1px solid var(--sahra-night-border);
+    color: var(--sahra-night-text);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font: 600 14px/1.3 var(--sahra-font-display);
+    letter-spacing: -0.01em;
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--sahra-night) 60%, transparent);
+  }
+  [dir='rtl'] .map-pin-label {
+    font-family: var(--sahra-font-arabic-display);
+    letter-spacing: 0;
+  }
+  .map-pin-label small {
+    display: block;
+    font: 500 10px/1.2 var(--sahra-font-latin);
+    color: var(--sahra-night-text-faint);
+    letter-spacing: 0.04em;
+  }
+  [dir='rtl'] .map-pin-label small {
+    font-family: var(--sahra-font-arabic);
+  }
+  .map-vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 500;
+    background: radial-gradient(
+      80% 90% at 55% 50%,
+      transparent 45%,
+      color-mix(in srgb, var(--sahra-night) 85%, transparent) 100%
+    );
+  }
+  /* OpenStreetMap's own attribution — required by its tile usage terms, kept
+     legible against the retinted tiles instead of Leaflet's default white pill. */
+  .leaflet-control-attribution {
+    background: color-mix(in srgb, var(--sahra-night) 75%, transparent) !important;
+    color: var(--sahra-night-text-faint) !important;
+    font-size: 9px !important;
+  }
+  .leaflet-control-attribution a {
+    color: var(--sahra-night-text-soft) !important;
+  }
+
   @media (min-width: 768px) {
     .mock-dash {
       height: 340px;
@@ -217,6 +317,14 @@
     }
     .map-panel {
       height: 280px;
+    }
+    /* Zamalek to Sheikh Zayed to New Cairo is a wide east-west spread; fitting
+       it into a ~330px-wide panel needs a small enough zoom that five fixed-
+       width label pills land on top of each other (found 2026-09-11). Below
+       md the map shows just the pulsing dots — legible at any zoom — and
+       map-legend.tsx lists the five names as plain chips under the panel. */
+    .map-pin-label {
+      display: none;
     }
     /* Two-up on a phone, the 4:3 card is 125 px tall and the caption crowds it. */
     .venue-card {

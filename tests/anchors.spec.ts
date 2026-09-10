@@ -8,7 +8,7 @@
 // The first test pins the SET: a new same-page link that is not listed here
 // fails, so nothing can point at nothing unannounced. `href="#"` in particular
 // (a link to nothing, the artboard's store badges) can never ship.
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 const ANCHORS = [
   { hash: '#content', section: 'the skip link target (Phase 1)', landed: true },

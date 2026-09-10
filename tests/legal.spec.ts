@@ -1,7 +1,7 @@
 // /privacy and /terms, both languages: they exist (the footer links to them),
 // they say plainly that the text is still to come, and the language switch
 // keeps the reader on the same page.
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 import ar from '../messages/ar.json' with { type: 'json' };
 import en from '../messages/en.json' with { type: 'json' };
 

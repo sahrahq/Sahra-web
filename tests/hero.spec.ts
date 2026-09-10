@@ -8,7 +8,8 @@
 // chunk is requested. Red-first: the gate and the media query were broken on
 // purpose (motion regardless of preference) and the reduced-motion tests went
 // red before this file was trusted.
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from './fixtures';
+import type { Page } from '@playwright/test';
 import ar from '../messages/ar.json' with { type: 'json' };
 import en from '../messages/en.json' with { type: 'json' };
 
