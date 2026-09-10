@@ -1,12 +1,22 @@
-// Section 7 — where: 5:7, copy at the start, and the real Cairo map from the
-// owner's second Claude Design export ("SAHRA Cairo Map") — real OpenStreetMap
-// tiles retinted into SAHRA Night, the same five neighbourhoods pinned at
-// their real coordinates (cairo-map.tsx). Loaded lazily, client-only, since
-// it is a live map and real weight; this file keeps rendering the ORIGINAL
-// schematic panel underneath it as the static fallback — what a reader with
-// JavaScript off, or before the map has mounted, sees instead. The panel's
-// geography stays fixed LTR either way (the design's own rule: Cairo does not
-// mirror), so only the pin/label layer is forced `dir="ltr"`.
+// Section 7 — where, composed the way the owner's second Claude Design export
+// ("SAHRA Cairo Map") draws it: the map is the WHOLE BAND, edge to edge, and
+// the copy floats over it on a Night card (owner, 2026-09-11 — "make it this
+// shape, taking the whole space"). It replaces the 5/7 grid this section had,
+// where the map was a panel in the right-hand cell.
+//
+// The export reserves ~500px of fit padding on the card's side so no pin ever
+// lands under the copy; cairo-map.tsx measures THIS card (`data-map-reserve`)
+// rather than assuming a width, because ours is 480px at 1280 and the page
+// gutter grows past that.
+//
+// Below md a card cannot float over a ~380px map without hiding it, so the
+// same two things stack: the copy, then a full-bleed map strip under it.
+//
+// The lattice and the vignette are the export's own two overlays — they sit
+// above the tiles (and, as in the export, above the pins: Leaflet's panes are
+// all inside one z-400 stacking context, so a z-499 sibling clears them) and
+// give the band's edges a fade instead of a hard rectangle. `.where-map` is
+// z-0 so both stay behind the card.
 import { Mashrabiya } from '@/components/brand/mashrabiya';
 import { CairoMapGate } from '@/components/site/cairo-map-gate';
 import { MapLegend } from '@/components/site/map-legend';
@@ -32,50 +42,56 @@ export function Where({ locale, copy }: WhereProps) {
     <section
       id="where"
       aria-labelledby="where-title"
-      className="mx-auto grid w-full max-w-7xl items-center gap-10 px-6 pt-24 md:grid-cols-12 md:gap-16 md:px-16"
+      className="where-band theme-night relative isolate mt-24 overflow-hidden bg-surface-page text-body"
     >
-      <div data-reveal className="md:col-span-5">
-        <p className="text-overline font-semibold uppercase tracking-overline text-accent">{copy.overline}</p>
-        <h2
-          id="where-title"
-          className="mt-4 font-display-script text-h1 font-semibold leading-tight text-balance text-body md:text-display"
-        >
-          {copy.title}
-        </h2>
-        <p className="mt-4 text-body-l leading-normal text-pretty text-soft">{copy.lead}</p>
-      </div>
-      <div className="md:col-span-7">
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl px-6 pt-16 pb-10 md:grid-cols-12 md:px-16 md:py-24">
         <div
           data-reveal
-          className="map-panel theme-night relative overflow-hidden rounded-xl bg-surface-page text-body shadow-2 ring-1 ring-night-border"
+          data-map-reserve
+          className="where-card rounded-xl border border-line p-6 shadow-2 md:col-span-5 md:p-10"
         >
-          {/* The static fallback: shown until the real map mounts, or always,
-              without JavaScript. The map (below) covers it once it is ready. */}
-          <Mashrabiya className="text-night-text" opacity={0.05} />
-          <div className="map-glow absolute inset-0" aria-hidden="true" />
-          <ul dir="ltr" className="absolute inset-0">
-            {PINS.map((p) => (
-              <li
-                key={p.key}
-                style={{ insetInlineStart: p.x, top: p.y }}
-                className="absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-1 rounded-pill border border-line bg-surface-card px-3 py-1 shadow-1 whitespace-nowrap md:gap-2 md:px-4 md:py-2"
-              >
-                <span
-                  className="size-2 shrink-0 rounded-pill bg-accent ring-4 ring-accent/25"
-                  aria-hidden="true"
-                />
-                <span className="font-display-script text-body-m font-semibold text-body md:text-body-l">
-                  {copy[p.key]}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <CairoMapGate locale={locale} copy={copy} />
+          <p className="text-overline font-semibold uppercase tracking-overline text-accent">
+            {copy.overline}
+          </p>
+          <h2
+            id="where-title"
+            className="mt-4 font-display-script text-h1 font-semibold leading-tight text-balance text-body md:text-display"
+          >
+            {copy.title}
+          </h2>
+          <p className="mt-4 text-body-l leading-normal text-pretty text-soft">{copy.lead}</p>
+          <MapLegend copy={copy} />
         </div>
-        {/* Below md the map itself only shows dots (globals.css hides its
-            labels there — five fixed-width pills do not fit a ~330px-wide
-            panel without overlapping); their names are listed here instead. */}
-        <MapLegend copy={copy} />
+      </div>
+      <div className="where-map">
+        {/* The static fallback: shown until the real map mounts, or always,
+            without JavaScript. The map (below) covers it once it is ready. */}
+        <Mashrabiya className="text-body" opacity={0.05} />
+        <div className="map-glow absolute inset-0" aria-hidden="true" />
+        <ul dir="ltr" className="absolute inset-0">
+          {PINS.map((p) => (
+            <li
+              key={p.key}
+              style={{ insetInlineStart: p.x, top: p.y }}
+              className="absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-1 rounded-pill border border-line bg-surface-card px-3 py-1 shadow-1 whitespace-nowrap md:gap-2 md:px-4 md:py-2"
+            >
+              <span
+                className="size-2 shrink-0 rounded-pill bg-accent ring-4 ring-accent/25"
+                aria-hidden="true"
+              />
+              <span className="font-display-script text-body-m font-semibold text-body md:text-body-l">
+                {copy[p.key]}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <CairoMapGate locale={locale} copy={copy} />
+        {/* 0.035, not the export's 0.07: the export strokes its lattice at
+            half alpha and then fades the layer, so 0.07 of a half-alpha
+            drawing is what it actually paints. At the full 0.07 ours read as
+            a visible grid laid over Cairo. */}
+        <Mashrabiya className="where-lattice text-body" opacity={0.035} />
+        <div className="map-vignette" aria-hidden="true" />
       </div>
     </section>
   );

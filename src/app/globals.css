@@ -84,8 +84,40 @@
   .venue-card {
     aspect-ratio: 4 / 3;
   }
-  .map-panel {
-    height: 360px;
+  /* Where: the Cairo Map export is a full-bleed band with the copy floating
+     over it, so the band's height is the card's height plus its padding —
+     with a floor, because a short card would leave a letterbox of a map. */
+  @media (min-width: 768px) {
+    .where-band {
+      display: flex;
+      align-items: center;
+      min-height: 620px;
+    }
+  }
+  .where-map {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    /* Its own stacking context, so the vignette (z-500, above Leaflet's panes
+       by design) cannot paint over the copy card that floats on top. */
+    z-index: 0;
+  }
+  @media (min-width: 768px) {
+    .where-map {
+      position: absolute;
+      inset: 0;
+      height: auto;
+    }
+  }
+  /* Almost opaque, not translucent glass: the text on it has to clear AA over
+     whatever part of Cairo it happens to land on. */
+  .where-card {
+    background: color-mix(in srgb, var(--sahra-night-raised) 94%, transparent);
+    backdrop-filter: blur(10px);
+  }
+  .where-lattice {
+    z-index: 499;
+    mix-blend-mode: screen;
   }
   /* For restaurants: the artboard's operator window, cut by the band. 340px
      is the DESKTOP height, where the sidebar and floor aside are visible and
@@ -282,21 +314,38 @@
     inset: 0;
     pointer-events: none;
     z-index: 500;
-    background: radial-gradient(
-      80% 90% at 55% 50%,
-      transparent 45%,
-      color-mix(in srgb, var(--sahra-night) 85%, transparent) 100%
-    );
+    background:
+      /* The two edges are ours, not the export's: the export is a map on its
+         own, this one is a band — the Night "for restaurants" band sits
+         directly under it, and an 85% vignette against a 100% band draws a
+         line across the page. Faded to the band's own colour, the map ends
+         without an edge. The 40px at the top does the same for the seam
+         between the map and the copy above it on a phone, where the map is a
+         strip under the card rather than the whole band. */
+      linear-gradient(to bottom, var(--sahra-night), transparent 40px),
+      linear-gradient(to bottom, transparent 72%, var(--sahra-night) 100%),
+      radial-gradient(
+        80% 90% at 55% 50%,
+        transparent 45%,
+        color-mix(in srgb, var(--sahra-night) 85%, transparent) 100%
+      );
   }
-  /* OpenStreetMap's own attribution — required by its tile usage terms, kept
-     legible against the retinted tiles instead of Leaflet's default white pill. */
+  /* OpenStreetMap's credit is a condition of using its tiles, so it stays —
+     but as one faint line in the corner, no white pill and no Leaflet
+     branding (cairo-map.tsx drops the library's own prefix), because the
+     owner asked for that corner to stop shouting (2026-09-11). */
   .leaflet-control-attribution {
-    background: color-mix(in srgb, var(--sahra-night) 75%, transparent) !important;
-    color: var(--sahra-night-text-faint) !important;
-    font-size: 9px !important;
+    background: none !important;
+    color: color-mix(in srgb, var(--sahra-night-text-faint) 55%, transparent) !important;
+    font:
+      500 9px/1.4 var(--sahra-font-latin),
+      sans-serif !important;
+    padding: 0 6px 2px !important;
+    box-shadow: none !important;
   }
   .leaflet-control-attribution a {
-    color: var(--sahra-night-text-soft) !important;
+    color: inherit !important;
+    text-decoration: none !important;
   }
 
   @media (min-width: 768px) {
@@ -315,14 +364,11 @@
     .strip-c {
       height: 84px;
     }
-    .map-panel {
-      height: 280px;
-    }
     /* Zamalek to Sheikh Zayed to New Cairo is a wide east-west spread; fitting
-       it into a ~330px-wide panel needs a small enough zoom that five fixed-
+       it into a ~380px-wide strip needs a small enough zoom that five fixed-
        width label pills land on top of each other (found 2026-09-11). Below
        md the map shows just the pulsing dots — legible at any zoom — and
-       map-legend.tsx lists the five names as plain chips under the panel. */
+       map-legend.tsx's chips carry the five names on the copy card. */
     .map-pin-label {
       display: none;
     }

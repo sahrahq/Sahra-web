@@ -69,11 +69,16 @@ const SIDEBAR = ['sbFloor', 'sbGuests', 'sbReviews', 'sbMenu'] as const;
 export function Operator({ locale, copy, brand }: OperatorProps) {
   const here = pathFor(locale, '/');
   const d = copy.dash;
+  // No top margin, unlike the other bands: the one above this is now the
+  // full-bleed Cairo map (where.tsx), Night to Night, and a margin there left
+  // a 96px stripe of the cream page between two dark bands — a mistake, not a
+  // separator. The map's own vignette fades its bottom edge into this band
+  // instead; `pt-24` still keeps the content clear of the seam.
   return (
     <section
       id="restaurants"
       aria-labelledby="operator-title"
-      className="theme-night relative mt-24 overflow-hidden bg-surface-page pt-24 text-body"
+      className="theme-night relative overflow-hidden bg-surface-page pt-24 text-body"
     >
       <Mashrabiya className="text-night-text" opacity={0.05} fade="bottom" />
       <div className="relative mx-auto w-full max-w-7xl px-6 md:px-16">

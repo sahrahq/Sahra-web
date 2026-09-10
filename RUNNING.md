@@ -117,7 +117,10 @@ committed before the owner has seen 1280, 1440 and 380 in both languages.
 The "where" band is a live Leaflet map over OpenStreetMap tiles
 (`cairo-map.tsx`); `snap.ts` does not mock them, so screenshots need the
 network and cost a few tile fetches per page — fine for a review, not for a
-loop.
+loop. Its `© OpenStreetMap contributors` line is a licence condition of
+drawing those tiles, not decoration: it is deliberately faint (`globals.css`,
+`.leaflet-control-attribution`) and must not be removed while the band draws
+OSM data. Leaflet's own credit is already off (`setPrefix(false)`).
 
 ## 7. Product screenshots — `public/shots/`, captured, never drawn
 

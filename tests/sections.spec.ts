@@ -84,7 +84,7 @@ for (const { locale, path, m } of LOCALES) {
       }
     });
 
-    test('where: the five neighbourhoods pinned on a Night panel that never mirrors', async ({
+    test('where: the five neighbourhoods on a full-bleed Cairo map, the copy floating clear of them', async ({
       page,
     }, testInfo) => {
       const section = page.locator('#where');
@@ -93,8 +93,8 @@ for (const { locale, path, m } of LOCALES) {
       await expect(section.getByRole('heading', { level: 2, name: m.where.title })).toBeVisible();
       // The static fallback panel — always in the DOM, covered once the real
       // map mounts (never removed, so a no-JS reader still gets a real
-      // picture). Its own list, scoped: the mobile legend below repeats the
-      // same five names, and the real map's labels do too.
+      // picture). Its own list, scoped: the card's chips repeat the same five
+      // names, and the real map's labels do too.
       const fallback = section.locator('ul[dir="ltr"]');
       await expect(fallback.getByRole('listitem')).toHaveCount(5);
       for (const key of ['zamalek', 'maadi', 'heliopolis', 'newCairo', 'sheikhZayed'] as const) {
@@ -122,16 +122,40 @@ for (const { locale, path, m } of LOCALES) {
         // node — the count sits in a nested <small>, which an exact match
         // against the name alone can never equal.
         // Below md the map shows only pins — its labels are hidden by CSS
-        // (five fixed-width pills do not fit a ~330px panel), and the same
-        // five names are listed as plain chips under the panel instead.
+        // (five fixed-width pills do not fit a ~380px strip), and the card's
+        // chips carry the five names there.
         if (phone) await expect(map.getByText(m.where[key])).toBeAttached();
         else await expect(map.getByText(m.where[key])).toBeVisible();
       }
-      if (phone) {
-        const legend = section.locator('ul').last();
-        await expect(legend.getByRole('listitem')).toHaveCount(5);
+
+      // The five names as chips on the copy card, at every width.
+      const chips = section.locator('[data-map-reserve] ul');
+      await expect(chips.getByRole('listitem')).toHaveCount(5);
+      for (const key of ['zamalek', 'maadi', 'heliopolis', 'newCairo', 'sheikhZayed'] as const) {
+        await expect(chips.getByText(m.where[key], { exact: true })).toBeVisible();
+      }
+
+      if (!phone) {
+        // The copy floats OVER the map from md up, so the map has to fit
+        // itself around the card (cairo-map.tsx measures it) and still leave
+        // each pin's label room to open. Both halves of that broke at 1440 on
+        // the day it was built: "New Cairo" ran off the end of the band, and
+        // in Arabic every label opened towards the card — the side the card is
+        // on — instead of away from it, landing underneath.
+        const band = (await map.boundingBox())!;
+        const card = (await section.locator('[data-map-reserve]').boundingBox())!;
         for (const key of ['zamalek', 'maadi', 'heliopolis', 'newCairo', 'sheikhZayed'] as const) {
-          await expect(legend.getByText(m.where[key], { exact: true })).toBeVisible();
+          const label = (await map.getByText(m.where[key]).boundingBox())!;
+          expect(label.x, `${key}: the label starts inside the band`).toBeGreaterThanOrEqual(band.x - 1);
+          expect(label.x + label.width, `${key}: the label ends inside the band`).toBeLessThanOrEqual(
+            band.x + band.width + 1,
+          );
+          const overCard =
+            label.x < card.x + card.width &&
+            label.x + label.width > card.x &&
+            label.y < card.y + card.height &&
+            label.y + label.height > card.y;
+          expect(overCard, `${key}: the label is clear of the copy card`).toBe(false);
         }
       }
     });

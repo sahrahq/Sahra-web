@@ -71,6 +71,12 @@ export function CairoMap({ locale, copy }: CairoMapProps) {
         touchZoom: false,
         attributionControl: true,
       });
+      // "© OpenStreetMap contributors" is a condition of using these tiles and
+      // stays (globals.css keeps it small and faint). Leaflet's own "Leaflet"
+      // credit and flag are not required by anything — they are the library
+      // advertising itself in the corner of the design, and the owner asked
+      // for them gone (2026-09-11).
+      map.attributionControl.setPrefix(false);
       const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors',
         maxZoom: 19,
@@ -94,19 +100,36 @@ export function CairoMap({ locale, copy }: CairoMapProps) {
 
       const bounds = L.latLngBounds(points);
       const fit = () => {
-        // The label reads to the END of its pin in both directions (logical,
-        // like the rest of the site) — so the fit padding gives the map more
-        // room on whichever side the labels actually extend into, RTL or LTR.
-        // Below md there are no labels (globals.css hides `.map-pin-label`;
-        // map-legend.tsx lists the names instead), and keeping their room
-        // there zoomed a 330px-wide panel out to the whole Delta-to-Suez
-        // region with the five dots bunched in its middle (seen 2026-09-11 at
-        // 380). Only the dot and its pulse rings need clearing then.
+        // From md up the copy floats over the map on a card at the start side
+        // (where.tsx), and the design's own fit reserves 500px for it so that
+        // no pin is ever hidden underneath. Measured, not assumed: the card is
+        // 480px wide at 1280 and the page gutter grows past that, and the side
+        // it sits on flips with the language. The label of a pin reads to the
+        // END of it, so this is also the side the labels need room in.
+        //
+        // Below md there is no floating card and no labels (globals.css hides
+        // `.map-pin-label`; the names are chips on the copy instead) — and
+        // keeping the card's room there zoomed a 380px strip out to the whole
+        // Delta with the five dots bunched in its middle (seen 2026-09-11).
         const rtl = locale === 'ar';
-        const labels = window.matchMedia('(min-width: 768px)').matches;
+        const wide = window.matchMedia('(min-width: 768px)').matches;
+        const card = wide ? el.closest('section')?.querySelector('[data-map-reserve]') : null;
+        let near = 36;
+        if (wide) {
+          const m = el.getBoundingClientRect();
+          const c = card?.getBoundingClientRect();
+          const covered = c ? (rtl ? m.right - c.left : c.right - m.left) : 0;
+          near = Math.round(Math.max(covered, 0)) + 24;
+        }
+        // The opposite side is the one every label reads INTO (a label sits at
+        // the end of its pin, so the two sides are always opposites), and it
+        // needs a label's own width or the outermost one is cut off by the
+        // band's edge — "New Cairo" was, at 1440 (found 2026-09-11).
+        const far = wide ? 150 : 36;
+        const vertical = wide ? 90 : 40;
         map!.fitBounds(bounds, {
-          paddingTopLeft: [labels ? (rtl ? 60 : 140) : 36, labels ? 50 : 40],
-          paddingBottomRight: [labels ? (rtl ? 140 : 60) : 36, labels ? 50 : 40],
+          paddingTopLeft: [rtl ? far : near, vertical],
+          paddingBottomRight: [rtl ? near : far, vertical],
         });
       };
       fit();
@@ -123,13 +146,14 @@ export function CairoMap({ locale, copy }: CairoMapProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale]);
 
+  // No `dir` of its own, exactly like the export: nothing here mirrors with
+  // it — every marker is placed by coordinate and every tile by transform, so
+  // Cairo's geography is the same picture in both languages either way. The one
+  // thing direction DOES decide is which side of its pin a label opens on, and
+  // that has to follow the READER: forcing this container to `ltr` (as it was
+  // until 2026-09-11) opened the Arabic labels rightwards, straight under the
+  // copy card, which in Arabic sits on the right.
   return (
-    <div
-      ref={elRef}
-      role="img"
-      aria-label={copy.mapLabel}
-      dir="ltr" // Cairo's geography does not mirror; only the labels' own script does.
-      className="absolute inset-0 bg-surface-page"
-    />
+    <div ref={elRef} role="img" aria-label={copy.mapLabel} className="absolute inset-0 bg-surface-page" />
   );
 }
