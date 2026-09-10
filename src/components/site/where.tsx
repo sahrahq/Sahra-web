@@ -12,6 +12,13 @@
 // Below md a card cannot float over a ~380px map without hiding it, so the
 // same two things stack: the copy, then a full-bleed map strip under it.
 //
+// NOTHING OF THE MAP'S OWN IS DRAWN IN THE BAND'S CORNERS — no attribution
+// widget, and since 2026-09-11 no credit caption either; the owner asked
+// three times for that corner to be clean. The credit those tiles are
+// licensed on the condition of still exists: it is one line in the site
+// footer (footer.tsx), where a reader looks for credits. Covering it, which
+// is what was asked for first, would be removing it with extra steps.
+//
 // The lattice and the vignette are the export's own two overlays — they sit
 // above the tiles (and, as in the export, above the pins: Leaflet's panes are
 // all inside one z-400 stacking context, so a z-499 sibling clears them) and
@@ -93,16 +100,6 @@ export function Where({ locale, copy }: WhereProps) {
         <Mashrabiya className="where-lattice text-body" opacity={0.035} />
         <div className="map-vignette" aria-hidden="true" />
       </div>
-      {/* Crediting OpenStreetMap is a condition of drawing its tiles, so this
-          line cannot go away while the band is a real map — but it does not
-          have to be a white pill bolted onto the map's corner (Leaflet's
-          control is off). It is a caption: the site's own smallest type, the
-          page's own gutter, on the band's bottom edge where the map has
-          already faded to Night, at the end side so it never meets the copy
-          card. Not a link, for the same reason no store badge is one. */}
-      <p className="pointer-events-none absolute inset-x-0 bottom-0 z-20 mx-auto w-full max-w-7xl px-6 pb-3 text-end text-overline text-faint md:px-16">
-        {copy.mapCredit}
-      </p>
     </section>
   );
 }

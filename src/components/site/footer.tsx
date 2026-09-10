@@ -48,6 +48,12 @@ export function SiteFooter({ locale, path, m }: SiteFooterProps) {
             </span>
           </Link>
           <p className="mt-4 max-w-2xs text-body-m leading-normal text-faint">{m.footer.tagline}</p>
+          {/* The "where" band draws OpenStreetMap tiles, whose licence requires
+              the credit, and the owner wants the map's own corners clean — so
+              the credit lives here, in the place a reader looks for credits,
+              rather than over the map (decision 2026-09-10 §6 follow-up). Not
+              a link, for the same reason the store badges are not. */}
+          <p className="mt-3 text-overline text-faint">{m.footer.mapCredit}</p>
           <div className="mt-6 flex flex-wrap gap-2">
             <StoreBadge copy={m.close} store="apple" variant="outline" />
             <StoreBadge copy={m.close} store="play" variant="outline" />

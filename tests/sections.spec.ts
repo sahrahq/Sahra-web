@@ -128,12 +128,6 @@ for (const { locale, path, m } of LOCALES) {
         else await expect(label).toBeVisible();
       }
 
-      // Crediting OpenStreetMap is a condition of drawing its tiles, and the
-      // owner has twice asked for that corner of the map to be quieter — so
-      // the line that satisfies the licence is asserted here, to keep "make it
-      // quieter" from becoming "make it gone" in some later pass.
-      await expect(section.getByText(m.where.mapCredit)).toBeVisible();
-
       // The five names as chips on the copy card, at every width.
       const chips = section.locator('[data-map-reserve] ul');
       await expect(chips.getByRole('listitem')).toHaveCount(5);
@@ -258,6 +252,11 @@ for (const { locale, path, m } of LOCALES) {
       const footer = page.getByRole('contentinfo');
       await footer.scrollIntoViewIfNeeded();
       await expect(footer.getByText(m.footer.tagline)).toBeVisible();
+      // The "where" band's tiles are licensed on the condition that they are
+      // credited, and the owner wants the map's own corners clean — so the
+      // credit lives here. Asserted so that "clean corner" cannot quietly
+      // become "no credit anywhere" in a later pass.
+      await expect(footer.getByText(m.footer.mapCredit)).toBeVisible();
       await expect(footer.locator('[data-store-badge]')).toHaveCount(2);
       await expect(footer.getByRole('link', { name: m.footer.how })).toHaveAttribute(
         'href',

@@ -168,8 +168,7 @@
     "heliopolis": "Heliopolis",
     "newCairo": "New Cairo",
     "sheikhZayed": "Sheikh Zayed",
-    "mapLabel": "A map of Cairo showing the neighbourhoods SAHRA covers",
-    "mapCredit": "© OpenStreetMap contributors"
+    "mapLabel": "A map of Cairo showing the neighbourhoods SAHRA covers"
   },
   "operator": {
     "overline": "SAHRA for restaurants",
@@ -241,7 +240,8 @@
     "operator": "Operator preview",
     "company": "Company",
     "privacy": "Privacy",
-    "terms": "Terms"
+    "terms": "Terms",
+    "mapCredit": "Map data © OpenStreetMap contributors"
   },
   "legal": {
     "back": "Back to SAHRA",

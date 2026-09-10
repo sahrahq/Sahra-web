@@ -168,8 +168,7 @@
     "heliopolis": "مصر الجديدة",
     "newCairo": "القاهرة الجديدة",
     "sheikhZayed": "الشيخ زايد",
-    "mapLabel": "خريطة القاهرة بتوضّح المناطق اللي سهرة فيها",
-    "mapCredit": "© مساهمو OpenStreetMap"
+    "mapLabel": "خريطة القاهرة بتوضّح المناطق اللي سهرة فيها"
   },
   "operator": {
     "overline": "سهرة للمطاعم",
@@ -241,7 +240,8 @@
     "operator": "شاشة المشغّل",
     "company": "الشركة",
     "privacy": "الخصوصية",
-    "terms": "الشروط"
+    "terms": "الشروط",
+    "mapCredit": "بيانات الخريطة © مساهمو OpenStreetMap"
   },
   "legal": {
     "back": "ارجع لسهرة",
