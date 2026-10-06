@@ -1,19 +1,10 @@
-// SAHRA lint rules for apps/web — the two sahra_lints rules ported from Dart
-// (packages/sahra_lints/lib/sahra_lints.dart: `_rtlRules`, `_stringRules`) plus
-// the colour-literal half of `_designRules`, as ESLint rules so they run under
-// the same `pnpm lint` as everything else.
-//
-// Every rule here has a planted violation in ./fixtures/violations.tsx and a
-// clean twin in ./fixtures/clean.tsx; `node tools/eslint/selftest.mjs` fails if
-// any rule stops firing on its fixture or starts firing on the clean file. A
-// guard nobody has seen fail is decoration (ENGINEERING-STANDARDS).
-//
-// Escape hatch, deliberately loud: `// eslint-disable-next-line sahra/<rule> -- <reason>`.
-// The reason is required by `reportUnusedDisableDirectives` + review, not by code.
+// sahra_lints' `_rtlRules`, `_stringRules` and the colour-literal half of `_designRules`, ported
+// to ESLint for `pnpm lint`. tools/eslint/selftest.mjs fails if one stops firing on its fixture.
+// Escape hatch: `// eslint-disable-next-line sahra/<rule> -- <reason>`.
 
 const LETTERS = /[A-Za-z؀-ۿ]/g;
 
-/** Attributes whose value a person READS. A literal in one is copy nobody will translate. */
+/** Attributes whose value a person reads. A literal in one is copy nobody will translate. */
 const COPY_ATTRIBUTES = new Set([
   'alt',
   'title',
@@ -32,13 +23,9 @@ function hasCopy(text) {
   return letters !== null && letters.length >= 2;
 }
 
-/**
- * Physical-direction Tailwind utilities. In Arabic the leading edge is on the
- * right; a hardcoded `pl-4` mirrors wrongly and never fails — it just looks
- * subtly broken to half the users. Logical utilities (`ps-`, `pe-`, `ms-`,
- * `me-`, `start-`, `end-`, `text-start`, `text-end`, `rounded-s-`, `rounded-e-`,
- * `border-s`, `border-e`) are the only ones allowed.
- */
+/** Physical-direction utilities: `pl-4` mirrors wrongly in Arabic and fails nothing, so only the
+ * logical ones (`ps-`/`pe-`, `ms-`/`me-`, `start-`/`end-`, `text-start`, `rounded-s-`, `border-s`…)
+ * are allowed. */
 const PHYSICAL_CLASS =
   /^(?:[a-z0-9@:_.\[\]-]*:)?-?(?:pl|pr|ml|mr|left|right|inset-l|inset-r|scroll-pl|scroll-pr|scroll-ml|scroll-mr|rounded-tl|rounded-tr|rounded-bl|rounded-br|rounded-l|rounded-r|border-l|border-r|float-left|float-right|clear-left|clear-right|text-left|text-right|origin-left|origin-right|origin-top-left|origin-top-right|origin-bottom-left|origin-bottom-right)(?:-[^\s]+)?$/;
 

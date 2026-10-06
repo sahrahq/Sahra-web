@@ -1,12 +1,6 @@
-// Section 10 — get the app: the artboard's closing Night band and its one gold
-// moment. Gold overline, the big headline, one line, both store badges, and a
-// phone rising out of the band's foot inside a gold glow — cut by the band so
-// only its top shows: the mark, "Table for 2 · 9:00 PM", "Confirmed · Layali
-// Lounge". Drawn, as the artboard draws it (owner's decision, 2026-09-10).
-//
-// GOLD, ONCE (design rules): the overline, the glow, the phone's halo. Gold on
-// Night clears AA at 8.79:1. The headline is `text-display-lg` (64) where the
-// artboard says 56 — the ladder has 48 and 64, and 64 is the step below 72.
+// Get the app: the closing Night band and the page's one gold moment (overline, glow, halo), with a
+// drawn phone cut by the band's foot. The headline is `text-display-lg` (64) where the artboard
+// says 56: the type ladder has no 56.
 import Image from 'next/image';
 import { Mashrabiya } from '@/components/brand/mashrabiya';
 import { PhoneShell } from '@/components/site/phone-shell';

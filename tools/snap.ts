@@ -1,12 +1,6 @@
-// LOOK at the built site. Rule 1 for a website: ask the browser, not the JSX.
-//
+// Screenshots of the built site, from the browser rather than the JSX:
 //   pnpm build && node tools/snap.ts [--out .snaps] [--routes /,/ar] [--reduced-motion] [--open-menu] [--settle 3500] [--widths 1280,1440,380] [--scroll] [--sections]
-//
-// Serves out/ on a local port, opens each route in headless Chromium at a
-// desktop width and at 380 px, and writes PNGs named <route>--<width>.png.
-// Every "done" claim about a section in Phase 2 comes with these, in both
-// languages. The folder is gitignored; the pictures are for the report, the
-// committed evidence is the Playwright test suite.
+// Writes <route>--<width>.png to a gitignored folder, for review only; the suite is the evidence.
 import { chromium } from '@playwright/test';
 import { existsSync, mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -26,7 +20,7 @@ const openMenu = args.includes('--open-menu');
 const scroll = args.includes('--scroll');
 // --sections: one PNG per <main> section and the footer, named <base>--<id>.png.
 const sections = args.includes('--sections');
-// --settle <ms>: wait after load, so a frame shows the RESTING state after the
+// --settle <ms>: wait after load, so a frame shows the resting state after the
 // editorial motion has finished rather than a moment inside it.
 const settle = Number(flag('--settle', '0'));
 const site = resolve('out');

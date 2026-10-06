@@ -1,13 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
-// Tests run against the STATIC EXPORT in out/, served the way a static host
-// serves it (tools/serve-out.ts) — the thing that ships, not the dev server.
-// `pnpm build` first; `pnpm test` then.
-//
-// Three projects, all Chromium: a desktop, a 380 px phone, and the desktop
-// again with `prefers-reduced-motion: reduce` emulated. The third exists so
-// "nothing moves under reduced motion" is a measurement (tests/hero.spec.ts),
-// not a promise in a comment.
+// Runs against the static export in out/ (`pnpm build` first), served by tools/serve-out.ts as a
+// static host would, so the tests see what ships. The reduced-motion project is where
+// tests/hero.spec.ts checks that nothing moves.
 export default defineConfig({
   testDir: 'tests',
   fullyParallel: true,

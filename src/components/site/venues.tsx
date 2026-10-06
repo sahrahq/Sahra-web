@@ -1,14 +1,6 @@
-// Section 6 — venues, exactly as the artboard lays it out: a centred overline,
-// four photo cards each with a star rating and a line under the name, then a
-// row of four more names in serif, then a footnote.
-//
-// THE NAMES AND RATINGS ARE THE ARTBOARD'S — Layali Lounge, Sequoia, Zooba,
-// Kazoku, and Sachi, Crimson, Pier 88, Abou El Sid — kept as the owner asked
-// (2026-09-10: "leave them as they are in the Claude Design file"). None of
-// these has a confirmed partnership with SAHRA; that is the owner's decision
-// to carry until real partners exist, recorded in decision 2026-09-10 §6/§8,
-// not a claim this file is making up on its own. The four photos are the
-// export's own stock pictures (public/photos/README.md).
+// Venues, as the artboard lays them out. The names and ratings are the artboard's, kept at the
+// owner's direction; none is a confirmed partner (decision 2026-09-10 §8 tracks it). The photos
+// are the export's stock pictures (public/photos/README.md).
 import Image from 'next/image';
 import { Icon } from '@/components/brand/icon';
 import type { Messages } from '@/i18n/messages';

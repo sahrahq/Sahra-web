@@ -1,13 +1,6 @@
-// Serve the static export in out/ the way a static host does — used by
-// tools/snap.ts (looking) and playwright.config.ts (testing), so both see the
-// same file resolution.
-//
-//   node tools/serve-out.ts [--port 4173]
-//
-// Resolution order matters: a static export writes BOTH `ar.html` and an `ar/`
-// folder (the RSC payload), so `/ar` must resolve to `ar.html` before the
-// folder is considered. That is what Vercel does; the first version of this
-// server did it the other way round and 404'd every Arabic page.
+// `node tools/serve-out.ts [--port 4173]` serves out/ as a static host does, for tools/snap.ts and
+// playwright.config.ts. The export writes both `ar.html` and an `ar/` folder (the RSC payload), so
+// `/ar` resolves to `ar.html` first, as Vercel does.
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { createServer, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';

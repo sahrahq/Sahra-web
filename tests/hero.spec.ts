@@ -1,13 +1,6 @@
-// §2 — the hero, in both locales, and the promise that reduced motion means
-// NOTHING MOVES and NOTHING EXTRA LOADS.
-//
-// Projects: `desktop` and `phone` run with motion allowed — the motion chunk
-// must load, mark the section, and finish with every word shown. The
-// `reduced-motion` project emulates the OS preference: the resting state is
-// there immediately, stays put, the section is never marked, and no GSAP
-// chunk is requested. Red-first: the gate and the media query were broken on
-// purpose (motion regardless of preference) and the reduced-motion tests went
-// red before this file was trusted.
+// The hero in both locales. With motion allowed the chunk loads, marks the section and ends with
+// every word shown; under the reduced-motion project the resting state is there at once, nothing
+// moves, and no motion chunk is requested.
 import { expect, test } from './fixtures';
 import type { Page } from '@playwright/test';
 import ar from '../messages/ar.json' with { type: 'json' };

@@ -1,12 +1,6 @@
-// Section 9 — FAQ, as the artboard draws it: 4:8, the heading at the start, a
-// hairline list with a terracotta plus on every question, the artboard's five
-// questions. Each item is a <details>, CLOSED by default: the artboard's own
-// mock shows every answer at once because a static picture cannot show a
-// click, but a real page that opens every answer before anyone asked is not a
-// FAQ. The plus turns into a cross on open. No JavaScript.
-//
-// The joining question carries `id="partner"`, the target of every "Partner
-// with SAHRA" (the artboard's `#partner` pointed at nothing).
+// FAQ as the artboard draws it, but each answer is a <details>, closed by default: the artboard
+// shows them open only because a picture cannot show a click. The joining question carries
+// `id="partner"`, the target of every "Partner with SAHRA".
 import { Icon } from '@/components/brand/icon';
 import type { Messages } from '@/i18n/messages';
 

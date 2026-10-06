@@ -35,10 +35,7 @@ for (const { path, kind, m, other, landing } of PAGES) {
     if (testInfo.project.name === 'phone') {
       await banner.getByRole('button', { name: m.nav.menuOpen }).click();
     }
-    // The nav's anchors still point at the landing, not at this page. Every
-    // one of these is a CROSS-DOCUMENT navigation (this page is /privacy or
-    // /terms, not the landing), which is exactly the case that broke before
-    // nav.tsx switched to next/link (2026-09-10).
+    // The nav's anchors still point at the landing: from here each is a cross-document navigation.
     await expect(banner.getByRole('link', { name: m.nav.faq }).first()).toHaveAttribute(
       'href',
       `${landing}#faq`,

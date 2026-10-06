@@ -1,6 +1,5 @@
-// §4 — how it works, in both locales: three steps, each with the artboard's
-// drawn Night screen standing in a sunken card, plus the number, title and
-// line under it. No product capture: the owner asked for the drawing.
+// How it works, both locales: three steps, each a drawn Night screen standing in a sunken card,
+// with its number, title and line. No product capture: the owner asked for the drawing.
 import { expect, test } from './fixtures';
 import ar from '../messages/ar.json' with { type: 'json' };
 import en from '../messages/en.json' with { type: 'json' };
@@ -30,11 +29,8 @@ for (const { locale, path, m } of LOCALES) {
         await expect(screen.getByText(step.screen.title)).toBeVisible();
         await expect(screen.getByText(step.screen.cta)).toBeVisible();
         await expect(screen.getByText(step.screen.r1a)).toBeVisible();
-        // Let the scroll reveal (data-reveal, staggered 0.08s apart, each a
-        // 0.7s tween) finish before reading geometry — mid-tween the whole
-        // <li> is still offset by its own translateY, which swamps a "flush
-        // edge" check (seen 2026-09-10). Worst case (the third, most-delayed
-        // card) settles at ~0.86s after its trigger fires.
+        // Let the staggered reveal finish before reading geometry: mid-tween the <li> is offset by
+        // its own translateY. The third card settles ~0.86s after its trigger.
         await page.waitForTimeout(1000);
         // The phone stands on the card's foot: its bottom edge is the card's,
         // within the card's own 1px border plus sub-pixel layout rounding.

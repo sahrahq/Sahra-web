@@ -1,44 +1,6 @@
-// Generates the web's brand plumbing from the design package. ONE source,
-// several outputs, one check:
-//
-//   node tools/generate-tokens.ts          # write
-//   node tools/generate-tokens.ts --check  # verify current (CI)
-//
-// Outputs (all generated — never edit by hand):
-//   src/styles/tokens.css   :root design variables (--sahra-*), the .theme-night
-//                           overrides, the Tailwind default-theme resets, and
-//                           an @theme inline block mapping every token to a
-//                           utility namespace. `bg-purple-500` does not exist
-//                           after this file; `bg-terracotta` does.
-//   src/styles/tokens.ts    the same values, typed, for code that needs a value
-//                           rather than a class (GSAP colour tweens, OG images).
-//   src/fonts/poppins/*     Poppins TTFs + licence, copied from
-//                           docs/design/assets/fonts (self-hosted via next/font/local).
-//   public/brand/*.png      the two logo variants.
-//   src/app/icon.png        the favicon — the terracotta mark.
-//   src/components/brand/icon-paths.ts
-//                           every glyph of docs/design/components/core/Icon.jsx.
-//
-// Same contract as packages/sahra_design_system/tool/generate_tokens.dart:
-// tokens.json is the single source, the check regenerates in memory and fails
-// on any difference, so a value cannot drift.
-//
-// CLASSIFICATION. Colours are classified by SHAPE (a hex value, or an alias of
-// one). Everything else is classified by its NAMESPACE PREFIX — `space-`,
-// `radius-`, `text-`, `font-`, `shadow-`, `leading-`, `tracking-` — because a
-// pixel value alone cannot say whether it is a font size or a padding, and
-// Tailwind needs to know. A token with a prefix this file does not know is a
-// HARD ERROR, not a silent skip: the next person adds the namespace on purpose.
-//
-// One deliberate renaming, mechanical and documented here: colour tokens whose
-// name starts with `text-` (text-body, text-soft, text-faint) lose that prefix
-// in the Tailwind namespace, so the utility is `text-body`, not `text-text-body`.
-// Nothing else is renamed.
-//
-// Font families: the design package names families by string ('Poppins').
-// next/font exposes each loaded family as a CSS variable instead, so the four
-// families are substituted here — the ONLY place that mapping exists. See
-// src/fonts.ts for the variables.
+// `pnpm tokens` writes tokens.css, tokens.ts and icon-paths.ts from docs/design and copies its
+// fonts and logos; `pnpm tokens:check` (CI) fails on any difference, like generate_tokens.dart.
+// Non-colour tokens are classified by prefix, since a px value can be a font size or a padding.
 import { createHash } from 'node:crypto';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -159,9 +121,8 @@ function generateCss(tokens: Tokens): string {
   lines.push('/* inline: utilities keep the var() reference, so a .theme-night section');
   lines.push('   re-themes bg-surface-page and text-body with no extra classes. */');
   lines.push('@theme inline {');
-  // Zero is the ABSENCE of spacing, not a spacing value — the same reasoning
-  // sahra_lints applies to Colors.transparent. Without it `top-0`, `p-0` and
-  // `inset-0` stop existing, and the reset above removed Tailwind's bare `0`.
+  // Zero is the absence of spacing, not a token; the reset above removed Tailwind's bare `0`, and
+  // without it `top-0`, `p-0` and `inset-0` stop existing.
   lines.push('  --spacing-0: 0px;');
   const seen = new Map<string, string>();
   for (const [name, value] of Object.entries(tokens.root)) {
@@ -207,15 +168,10 @@ function generateTs(tokens: Tokens): string {
   return lines.join('\n');
 }
 
-// ──────────────────────────────────────────────────────────────── icons ──
+// Icons
 
-// The icon drawings have ONE owner: docs/design/components/core/Icon.jsx. The
-// site does not retype them; it extracts every non-empty entry of that file's
-// `P` object into src/components/brand/icon-paths.ts and drift-checks it with
-// the tokens. Until 2026-09-10 the paths were typed by hand and "kept in step
-// by eye" — the audit that day found the set had already diverged (one glyph
-// drawn only on the web). The Flutter set (sahra_icon.dart) is still a hand
-// port with no such check.
+// Icon.jsx owns the drawings: every non-empty entry of its `P` object goes into icon-paths.ts,
+// drift-checked with the tokens, so the web never retypes a glyph.
 function generateIconPaths(): string {
   const src = readFileSync(join(design, 'components', 'core', 'Icon.jsx'), 'utf8');
   const start = src.indexOf('const P={');
@@ -246,7 +202,7 @@ function generateIconPaths(): string {
   return lines.join('\n');
 }
 
-// ─────────────────────────────────────────────────────────────── assets ──
+// Assets
 
 type Copy = { from: string; to: string };
 
@@ -282,7 +238,7 @@ function sha(path: string): string {
   return createHash('sha256').update(bytes).digest('hex');
 }
 
-// ──────────────────────────────────────────────────────────────── main ──
+// Main
 
 const tokens = JSON.parse(readFileSync(tokensJson, 'utf8')) as Tokens;
 const outputs: Record<string, string> = {

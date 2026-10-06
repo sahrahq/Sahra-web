@@ -48,26 +48,18 @@
   }
 }
 
-/* GEOMETRY that is not a brand value. The landing is the owner's Claude Design
-   artboard (apps/web/claude design/, 1280 wide) made responsive. A phone
-   mock-up's visible height, a photo strip's stagger, a map panel's height are
-   compositions from that artboard, not tokens — so they live here as component
-   classes, in px, with the phone width below 768 px beside each desktop value.
-   Every COLOUR below is still a token, mixed with color-mix() for translucency. */
+/* Geometry from the owner's artboard (claude design/, 1280 wide) that is not a brand value:
+   mock-up heights, the photo strip's stagger. Component classes in px, with phone values in the
+   max-width 767px block; every colour is still a token. */
 @layer components {
-  /* Hero: the phone rises out of the band's bottom edge; the band crops it.
-     ONE height at every width — the phone itself is never scaled down (its
-     chip row is already close to full width at 340px; shrinking the phone
-     risked wrapping it), so a shorter mobile well was cropping noticeably
-     more of the SAME drawing away than the desktop one did (reported
-     2026-09-10: "not fully visible on mobile the way it is on the laptop").
-     Same crop, every width. */
+  /* Hero: the band crops the phone. One height at every width: the phone is never scaled down,
+     so a shorter mobile well would crop more of the same drawing. */
   .hero-phone-well {
     height: 300px;
     overflow: hidden;
   }
   /* How it works: a Night phone stands in a sunken card and is cut at its foot.
-     Same height on a phone: the 256 px frame is 410 px tall and 340 cut its head. */
+     Same height on a phone, where a shorter card cut the phone's head. */
   .step-visual {
     height: 420px;
   }
@@ -119,13 +111,8 @@
     z-index: 499;
     mix-blend-mode: screen;
   }
-  /* For restaurants: the artboard's operator window, cut by the band. 340px
-     is the DESKTOP height, where the sidebar and floor aside are visible and
-     the middle column is exactly that tall in the artboard. Below md those two
-     asides are hidden and the middle column is the whole window — forcing it
-     to the same 340px there clipped and overlapped its own content (the KPI
-     grid drops to two rows, the title can wrap), found 2026-09-10. So the
-     height is natural (no rule) until md, and fixed only from md up. */
+  /* For restaurants: the operator window, cut by the band. Its 340px height is set from md only
+     (below); under md the asides hide and a fixed height would clip the middle column. */
   .mock-dash-side {
     width: 180px;
     flex: none;
@@ -166,28 +153,11 @@
   .mock-phone-closer > .mock-screen {
     border-radius: 36px;
   }
-  /* `max-width: 100%` (above) only ever makes a phone NARROWER than its own
-     drawing, never shorter. The closer phone is cropped by a well that DOES
-     shrink on a phone (176px → a shorter reveal below); its 400px height and
-     44px corner radius did not shrink with it, so the same corner was carved
-     out of a much shorter reveal — a 44px curve in a ~150px window reads as a
-     blob, not a phone edge (reported 2026-09-10). It scales down below md at
-     the SAME ratio its well does, so the fraction of the phone a reader sees,
-     and how big its corner looks against that fraction, stays the one the
-     artboard drew. The hero and step phones are not cropped this tightly
-     (their wells keep a taller fraction, or do not crop at all) and are left
-     at one size. */
   .mock-card-photo {
     height: 150px;
   }
-  /* Get the app: only the top of the confirmation ticket shows, as in the
-     artboard — desktop's 176px clears both of the phone's lines of text
-     ("Table for 2 · 9:00 PM", "Confirmed · Layali Lounge") with room to
-     spare. The mobile phone is smaller (see the scaled sizes below), but its
-     first 132px — matching the DESKTOP reveal's ratio exactly — cropped
-     right after the logo, before any of that text: the one thing the closer
-     band exists to show (reported 2026-09-10, "just a circle"). A matched
-     ratio is the wrong target here; matched CONTENT is. */
+  /* Get the app: the well shows only the top of the ticket, as in the artboard. On a phone it is
+     sized to show both lines of text, not the desktop ratio, which cut off after the logo. */
   .closer-phone-well {
     height: 176px;
   }
@@ -231,15 +201,8 @@
     display: none;
   }
 
-  /* The Cairo map (cairo-map.tsx): a real Leaflet map over real OpenStreetMap
-     tiles, retinted into SAHRA Night, from the owner's second Claude Design
-     export. Named classes, not Tailwind utilities, because Leaflet inserts a
-     marker's HTML as a raw string (`L.divIcon({ html })`), which cannot carry
-     Tailwind's arbitrary-value or colour-literal restrictions the way JSX
-     can — every colour below is still a token, via var()/color-mix(), same as
-     everywhere else on this site; it is only read from CSS instead of from a
-     className string, since that is what the lint rule that would otherwise
-     catch a stray literal actually scans (.tsx source, not .css). */
+  /* The Cairo map (cairo-map.tsx). Named classes, not utilities, because Leaflet inserts a
+     marker's HTML as a raw string (`L.divIcon({ html })`); every colour is still a token. */
   .map-tiles {
     filter: invert(1) hue-rotate(185deg) brightness(0.5) sepia(0.75) saturate(1.05) contrast(1.15);
     opacity: 0.9;
@@ -259,9 +222,7 @@
       0 0 0 3px var(--sahra-night),
       0 0 0 4px color-mix(in srgb, var(--sahra-terracotta) 60%, transparent);
   }
-  /* Two rings, the second delayed half a cycle, so the pulse never fully stops —
-     collapsed to a single still frame under prefers-reduced-motion by the
-     blanket rule at the top of this file (animation-duration: 0.01ms). */
+  /* Two rings half a cycle apart, so the pulse never stops; the reduced-motion rule stills it. */
   .map-pin-ring {
     position: absolute;
     inset: -10px;
@@ -282,10 +243,7 @@
       opacity: 0;
     }
   }
-  /* One line, the name: the export's second line was a venue count nothing in
-     the product can count, and it is gone (cairo-map.tsx). The pill is
-     centred on its dot now that it is a single line, where the export
-     hung a two-line block from the dot's top. */
+  /* The name alone, on one line, centred on its dot. */
   .map-pin-label {
     position: absolute;
     inset-inline-start: 22px;
@@ -311,13 +269,8 @@
     pointer-events: none;
     z-index: 500;
     background:
-      /* The two edges are ours, not the export's: the export is a map on its
-         own, this one is a band — the Night "for restaurants" band sits
-         directly under it, and an 85% vignette against a 100% band draws a
-         line across the page. Faded to the band's own colour, the map ends
-         without an edge. The 40px at the top does the same for the seam
-         between the map and the copy above it on a phone, where the map is a
-         strip under the card rather than the whole band. */
+      /* The two linear fades are ours, not the export's: they fade the map into the Night band
+         below and, on a phone, the copy above, so the band ends without a line across the page. */
       linear-gradient(to bottom, var(--sahra-night), transparent 40px),
       linear-gradient(to bottom, transparent 72%, var(--sahra-night) 100%),
       radial-gradient(
@@ -326,9 +279,6 @@
         color-mix(in srgb, var(--sahra-night) 85%, transparent) 100%
       );
   }
-  /* Leaflet's attribution control is off entirely (cairo-map.tsx); the data
-     credit it would have drawn is a caption in the band instead (where.tsx),
-     so there is no `.leaflet-control-*` to restyle here. */
 
   @media (min-width: 768px) {
     .mock-dash {
@@ -346,11 +296,8 @@
     .strip-c {
       height: 84px;
     }
-    /* Zamalek to Sheikh Zayed to New Cairo is a wide east-west spread; fitting
-       it into a ~380px-wide strip needs a small enough zoom that five fixed-
-       width label pills land on top of each other (found 2026-09-11). Below
-       md the map shows just the pulsing dots — legible at any zoom — and
-       map-legend.tsx's chips carry the five names on the copy card. */
+    /* At the zoom a phone-wide strip needs, five label pills overlap; the dots stay, and
+       map-legend.tsx's chips carry the names. */
     .map-pin-label {
       display: none;
     }
@@ -361,11 +308,8 @@
     .closer-phone-well {
       height: 190px;
     }
-    /* Scaled to ~75% of the desktop closer phone — see the note above the
-       desktop sizes. Radius and padding scale with it, so the corner is
-       still a phone's corner and not a fixed px curve on a smaller drawing;
-       the WELL above is deliberately taller than that same 75% ratio would
-       give, so both lines of text clear it, same as on a desktop. */
+    /* The closer phone at ~75%, radius and padding with it, so its corner still reads as a
+       phone's in the shorter reveal; `max-width` alone only narrows a phone, never shortens it. */
     .mock-phone-closer {
       width: 210px;
       height: 300px;

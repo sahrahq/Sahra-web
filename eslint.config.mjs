@@ -4,34 +4,28 @@ import nextTs from 'eslint-config-next/typescript';
 import betterTailwindcss from 'eslint-plugin-better-tailwindcss';
 import sahra from './tools/eslint/sahra-rules.mjs';
 
-// Three sources of rules, one command. See tools/eslint/sahra-rules.mjs for
-// what the sahra rules are and why; tools/eslint/selftest.mjs proves every
-// rule below can fail.
+// Next's rules, the Tailwind plugin and ours (tools/eslint/sahra-rules.mjs) under one `pnpm lint`.
+// tools/eslint/selftest.mjs fails if a rule in its EXPECTED list stops firing.
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   {
-    // The fixtures are listed so the self-test lints them under the SAME rule set;
+    // The fixtures are listed so the self-test lints them under this rule set;
     // globalIgnores below keeps them out of `pnpm lint`.
     files: ['src/**/*.{ts,tsx}', 'tools/**/*.{ts,mjs}', 'tools/eslint/fixtures/*.tsx'],
     plugins: { 'better-tailwindcss': betterTailwindcss, sahra },
     settings: {
       'better-tailwindcss': {
-        // Tailwind 4: the CSS entry. It imports the generated tokens.css, which
-        // is what makes "bg-purple-500 is unknown" true — the default palette is
-        // reset there, so the plugin's list of known classes is the token list.
+        // The CSS entry imports tokens.css, which resets Tailwind's default palette,
+        // so the plugin's known classes are the token list.
         entryPoint: 'src/app/globals.css',
-        // Component classes declared in globals.css (@layer components) are
-        // registered classes, not typos: .how-steps, .how-sticky, .how-step-visual, .is-motion.
+        // Classes declared in globals.css (@layer components) count as known.
         detectComponentClasses: true,
       },
     },
     rules: {
-      // `theme-night` is a real class, declared in the GENERATED src/styles/tokens.css
-      // (it redefines the --sahra-* variables for a night section). The plugin reads
-      // the entry file and does not follow its @import, so it cannot see the
-      // declaration — this is the plugin's reach, not an unknown class. Any other
-      // unknown class still fails.
+      // `theme-night` is declared in the generated tokens.css, which the plugin cannot
+      // see: it reads the entry file but not its @import.
       'better-tailwindcss/no-unknown-classes': ['error', { ignore: ['^theme-night$'] }],
       'better-tailwindcss/no-conflicting-classes': 'error',
       'better-tailwindcss/no-duplicate-classes': 'error',
@@ -53,13 +47,12 @@ const eslintConfig = defineConfig([
     },
   },
   {
-    // Generated, and the generator that writes it: tokens.ts spells every
-    // colour once, on purpose.
+    // tokens.ts and its generator are the one place every colour is spelled.
     files: ['src/styles/tokens.ts', 'tools/generate-tokens.ts'],
     rules: { 'sahra/no-color-literal': 'off' },
   },
   {
-    // The message loader and the check scripts handle copy as DATA.
+    // The message loader and the check scripts handle copy as data.
     files: ['src/i18n/**', 'tools/**'],
     // …but not the fixtures, whose planted copy the self-test must see reported.
     ignores: ['tools/eslint/fixtures/**'],

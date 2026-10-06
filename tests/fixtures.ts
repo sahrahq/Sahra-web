@@ -1,14 +1,6 @@
-// Every page load in this suite mounts the lazy Cairo map (cairo-map.tsx),
-// which fetches real OpenStreetMap tiles for the "where" section — fine for
-// one visitor, not for a suite that loads the page on the order of 200 times
-// a run across every spec file, every locale and every project. Every spec
-// file imports `test`/`expect` from here instead of '@playwright/test'
-// directly, so that mock applies everywhere without repeating it per file.
-//
-// The MARKERS themselves (cairo-map.tsx's divIcons, holding the neighbourhood
-// names and counts) are plain DOM the map creates before it ever asks for a
-// tile, so mocking the tile image doesn't hide a real bug in them — only in
-// whether a tile image itself decodes, which no test here asserts on.
+// Every spec imports `test`/`expect` from here, so each page load answers the Cairo map's
+// OpenStreetMap tile requests locally instead of fetching them hundreds of times a run. The
+// markers are DOM the map creates before any tile, so the stub hides nothing a test asserts.
 import { test as base, expect } from '@playwright/test';
 
 const TRANSPARENT_PNG = Buffer.from(
@@ -17,10 +9,7 @@ const TRANSPARENT_PNG = Buffer.from(
 );
 
 export const test = base.extend({
-  // Named `provide`, not Playwright's usual `use` — ESLint's react-hooks
-  // plugin treats any function named `use(...)` as a React hook call by
-  // naming convention alone, and flags this callback (which is Playwright's
-  // fixture API, unrelated to React) as one used outside a component.
+  // `provide`, not Playwright's usual `use`: the react-hooks lint treats any `use(...)` as a hook.
   page: async ({ page }, provide) => {
     await page.route('https://tile.openstreetmap.org/**', (route) =>
       route.fulfill({ status: 200, contentType: 'image/png', body: TRANSPARENT_PNG }),

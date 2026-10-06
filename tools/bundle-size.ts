@@ -1,20 +1,6 @@
-// First-load JavaScript, measured on the thing that ships.
-//
-//   pnpm build && node tools/bundle-size.ts [--route ar] [--max 180]
-//
-// Reads the route's exported HTML from out/, collects every script it loads
-// on a MODERN browser — <script src> without `nomodule`, plus
-// <link rel="modulepreload"> — gzips each file the way a host would, and
-// prints the total. `nomodule` scripts (Next's legacy polyfills) are listed
-// separately: a browser that understands modules never fetches them, and
-// Next's own "First Load JS" figure excludes them for the same reason.
-//
-// `--max <kB>` exits 1 above the budget — decision 2026-09-10 §3 sets it at
-// 180 kB gzip for the landing. This is the number the Phase 3 CI job asserts;
-// it is also how "GSAP costs X" is measured rather than estimated.
-//
-// Lazily imported chunks (next/dynamic) are not first-load and are not counted;
-// they are a separate request after hydration, which tests/hero.spec.ts checks.
+// Gzipped first-load JS of an exported route: `node tools/bundle-size.ts [--route ar] [--max 180]`
+// after `pnpm build`; 180 kB is the budget (decision 2026-09-10 §3). `nomodule` polyfills are not
+// counted, as a modern browser never fetches them; nor are lazy chunks, loaded after hydration.
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { gzipSync } from 'node:zlib';

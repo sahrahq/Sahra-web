@@ -1,11 +1,6 @@
-// The four families, per docs/design/HANDOFF.md — loaded once, exposed as CSS
-// variables, and referenced ONLY from the generated tokens.css (`--sahra-font-*`).
-// Nothing else names a font.
-//
-// Poppins is self-hosted from the design package's own files (synced into
-// src/fonts/poppins by tools/generate-tokens.ts, licence alongside). The three
-// Google families are self-hosted by next/font at build time: no request
-// leaves the visitor's browser for Google.
+// The four families of docs/design/HANDOFF.md, as CSS variables read only by the generated
+// tokens.css (`--sahra-font-*`). Poppins is copied from the design package by
+// tools/generate-tokens.ts; next/font self-hosts the rest, so no request goes to Google.
 import { IBM_Plex_Sans_Arabic, Newsreader, Reem_Kufi } from 'next/font/google';
 import localFont from 'next/font/local';
 

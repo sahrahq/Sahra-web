@@ -1,19 +1,6 @@
-// Mashrabiya — the traditional Cairo carved-wood screen, abstracted to an
-// eight-point-star lattice. Ported from docs/design/components/brand/Mashrabiya.jsx.
-// SAHRA's signature texture: backdrops, dividers, empty states. Distinctly
-// Cairene, not a generic 'Arabic pattern'. Tiles seamlessly.
-//
-// One deliberate difference from the reference: the reference takes a colour
-// STRING and bakes it into a data-URL background, which needs a literal
-// (`rgba(221,95,53,0.5)` in its default). Here the lattice is an inline SVG
-// <pattern> stroked with `currentColor`, so the colour comes from a token
-// utility on the element — `<Mashrabiya className="text-accent" />` — and no
-// file on this site spells a colour. Same drawing, same 44px tile.
-//
-// FADES. The landing's artboard masks the lattice three ways: strongest at the
-// top centre (the hero), at the bottom centre (the restaurants and get-the-app
-// bands), or rising from the bottom edge (the restaurant card). `fade` names
-// them; `true` keeps the reference's own top fade.
+// Port of docs/design/components/brand/Mashrabiya.jsx, stroked with `currentColor` instead of the
+// reference's colour string in a data URL, so a token utility sets the colour. `fade` is one of the
+// artboard's masks (top, bottom, rise); `true` keeps the reference's own top fade.
 import type { CSSProperties } from 'react';
 import { useId } from 'react';
 

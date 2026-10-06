@@ -1,10 +1,6 @@
-// The one <html>/<body> shell both root layouts render. Two route groups own
-// two root layouts (EN at `/`, AR at `/ar`) so `lang` and `dir` are static per
-// tree — which is what a crawler, a screen reader and the font switch all read.
-//
-// No font utility on <body>: globals.css picks the Latin or Arabic stack from
-// <html lang>, and a utility class would outrank that base rule and hand Arabic
-// text to a fallback face (seen in the first Phase 1 snapshot).
+// The <html>/<body> shell of both root layouts, one per route group, so `lang` and `dir` are
+// static per tree. No font utility on <body>: globals.css picks the stack from <html lang>, and a
+// utility would outrank that rule and give Arabic a fallback face.
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { fontVariables } from '@/fonts';

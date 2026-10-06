@@ -1,14 +1,6 @@
-// A phone drawn the way the owner's Claude Design artboard draws one: a dark
-// bezel, a Night screen with a notch, the screen's content laid out in HTML.
-// Three sizes, the artboard's own — the hero's 340×720, the how-it-works
-// 250×400 with a flat foot (it stands in a card that cuts it), the closer's
-// 280×400. The geometry lives in globals.css (`.mock-phone-*`); every colour
-// is a token: the bezel is ink, the screen the Night surface, the hairline the
-// night border.
-//
-// Owner's decision, 2026-09-10: the phones show the artboard's drawn screens,
-// not captures of the app — "keep them as they are in the Claude Design file".
-// device-frame.tsx (the capture frame) stays in the repo, unused.
+// A phone as the artboard draws one: dark bezel, Night screen, notch, content in HTML. The three
+// sizes are `.mock-phone-*` in globals.css. The owner chose drawn screens over app captures
+// (decision 2026-09-10 §6).
 import type { ReactNode } from 'react';
 
 export type PhoneSize = 'hero' | 'step' | 'closer';

@@ -1,32 +1,8 @@
 'use client';
 
-// The real Cairo map — the owner's second Claude Design export ("SAHRA Cairo
-// Map"), which the schematic panel in where.tsx stood in for until now. A
-// live Leaflet map over real OpenStreetMap tiles, retinted into SAHRA Night
-// by a CSS filter on the tile layer (globals.css `.map-tiles`), with the
-// same five neighbourhoods pinned at their real coordinates and a pulsing
-// terracotta dot for each — not schematic percentages on a drawn rectangle,
-// an actual map of Cairo.
-//
-// LOADED LAZILY, CLIENT-ONLY (cairo-map-gate.tsx, next/dynamic ssr:false) —
-// Leaflet is real weight (see decision 2026-09-10 §7) that no visitor should
-// pay for before this section scrolls into view, and it touches `window` at
-// import time, which a static export's build-time render cannot do. Until it
-// mounts, where.tsx keeps rendering its own static schematic panel in the
-// same space; this map replaces it, not the other way around, so a reader on
-// a slow connection or with JavaScript off still sees a real (if simpler)
-// picture of where SAHRA is.
-//
-// NO COUNTS, unlike the export. It draws a second line under each name — "14
-// venues", "9 venues" — and nothing in the product counts venues by
-// neighbourhood, so those five figures were the design's invention carried on
-// a real-looking map. The owner had them removed (2026-09-11). A pin now says
-// where SAHRA is, which is true, and does not say how much, which nothing
-// here knows yet.
-//
-// NOT INTERACTIVE, ON PURPOSE. Panning, scroll-zoom and touch-zoom are all
-// off (matching the design): this is a picture that happens to be a real map,
-// not a tool for finding an address.
+// The "SAHRA Cairo Map" export: Leaflet over OpenStreetMap tiles, retinted by `.map-tiles` in
+// globals.css. Lazy and client-only (cairo-map-gate.tsx), over where.tsx's static panel, which
+// stays for readers without JavaScript. Not interactive: it illustrates coverage, it is not a tool.
 import { useEffect, useRef } from 'react';
 import type { Locale } from '@/i18n/locales';
 import type { Messages } from '@/i18n/messages';
@@ -69,27 +45,12 @@ export function CairoMap({ locale, copy }: CairoMapProps) {
         boxZoom: false,
         keyboard: false,
         touchZoom: false,
-        // No control of Leaflet's: it draws a white pill in the map's corner
-        // carrying the library's own credit and flag alongside the data's, and
-        // the owner asked twice for that corner to stop shouting. Crediting
-        // OpenStreetMap is a condition of drawing its tiles, so the credit
-        // does not go away — where.tsx renders it as a caption at the band's
-        // bottom edge, in the site's own type, which is what the ODbL asks of
-        // a map that is a picture rather than a tool.
+        // OpenStreetMap's credit, a condition of using its tiles, is in the site footer
+        // (`footer.mapCredit`) rather than a control on the map.
         attributionControl: false,
       });
-      // OpenStreetMap's standard tiles. They render Egypt's place names in
-      // ARABIC whichever language the page is in, and the owner asked for a
-      // map that follows the site's language (2026-09-11). Every keyless way
-      // to fix that turned out not to exist any more, measured rather than
-      // assumed: CARTO's label-free basemaps now stamp "API KEY REQUIRED"
-      // across the tile, Wikimedia's international style answers 403 to
-      // anything that is not a Wikimedia project, and Stadia and MapTiler
-      // both need an account. The keyless remaining option, vector tiles
-      // (OpenFreeMap) rendered by MapLibre, costs ~220 kB of library plus
-      // ~250 kB per tile — the wrong trade for a decorative band on a phone.
-      // So the tiles stay as they are until the owner supplies a key
-      // (decision 2026-09-10 §8), which also buys a label-free style.
+      // The standard tiles label Cairo in Arabic in both locales; a label-free style needs a
+      // provider key (decision 2026-09-10 §8).
       const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         className: 'map-tiles',
@@ -111,17 +72,9 @@ export function CairoMap({ locale, copy }: CairoMapProps) {
 
       const bounds = L.latLngBounds(points);
       const fit = () => {
-        // From md up the copy floats over the map on a card at the start side
-        // (where.tsx), and the design's own fit reserves 500px for it so that
-        // no pin is ever hidden underneath. Measured, not assumed: the card is
-        // 480px wide at 1280 and the page gutter grows past that, and the side
-        // it sits on flips with the language. The label of a pin reads to the
-        // END of it, so this is also the side the labels need room in.
-        //
-        // Below md there is no floating card and no labels (globals.css hides
-        // `.map-pin-label`; the names are chips on the copy instead) — and
-        // keeping the card's room there zoomed a 380px strip out to the whole
-        // Delta with the five dots bunched in its middle (seen 2026-09-11).
+        // From md the copy card covers the map's start side, so the fit is padded by the card's
+        // measured width and no pin lands under it. Below md there is no card over the map and no
+        // labels, and that padding would zoom the strip out until the five dots bunch together.
         const rtl = locale === 'ar';
         const wide = window.matchMedia('(min-width: 768px)').matches;
         const card = wide ? el.closest('section')?.querySelector('[data-map-reserve]') : null;
@@ -132,10 +85,7 @@ export function CairoMap({ locale, copy }: CairoMapProps) {
           const covered = c ? (rtl ? m.right - c.left : c.right - m.left) : 0;
           near = Math.round(Math.max(covered, 0)) + 24;
         }
-        // The opposite side is the one every label reads INTO (a label sits at
-        // the end of its pin, so the two sides are always opposites), and it
-        // needs a label's own width or the outermost one is cut off by the
-        // band's edge — "New Cairo" was, at 1440 (found 2026-09-11).
+        // Labels open to the end side, so it needs a label's width or the outermost one is cut off.
         const far = wide ? 150 : 36;
         const vertical = wide ? 90 : 40;
         map!.fitBounds(bounds, {
@@ -157,13 +107,8 @@ export function CairoMap({ locale, copy }: CairoMapProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale]);
 
-  // No `dir` of its own, exactly like the export: nothing here mirrors with
-  // it — every marker is placed by coordinate and every tile by transform, so
-  // Cairo's geography is the same picture in both languages either way. The one
-  // thing direction DOES decide is which side of its pin a label opens on, and
-  // that has to follow the READER: forcing this container to `ltr` (as it was
-  // until 2026-09-11) opened the Arabic labels rightwards, straight under the
-  // copy card, which in Arabic sits on the right.
+  // No `dir` of its own: markers and tiles are placed by coordinate, and the inherited direction
+  // opens each label towards the end side, away from the copy card at the start.
   return (
     <div ref={elRef} role="img" aria-label={copy.mapLabel} className="absolute inset-0 bg-surface-page" />
   );

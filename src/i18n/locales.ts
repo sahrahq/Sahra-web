@@ -1,8 +1,5 @@
-// The two locales, and the two facts about each that the router needs.
-//
-// EN lives at `/`, AR at `/ar` — mirrored route for route (decision 2026-09-10
-// §2). Both are static: there is no runtime negotiation and no redirect, so a
-// crawler and a diner see exactly the same HTML.
+// EN at `/`, AR at `/ar`, mirrored route for route (decision 2026-09-10 §2). No runtime
+// negotiation and no redirect, so a crawler and a diner get the same static HTML.
 
 export const locales = ['en', 'ar'] as const;
 export type Locale = (typeof locales)[number];

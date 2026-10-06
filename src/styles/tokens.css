@@ -35,8 +35,10 @@
   --sahra-text-soft: var(--sahra-ink-soft);
   --sahra-text-faint: var(--sahra-ink-faint-legible);
   --sahra-accent: var(--sahra-terracotta);
+  --sahra-accent-fill: var(--sahra-terracotta-dark);
   --sahra-accent-hover: var(--sahra-terracotta-dark);
   --sahra-accent-contrast: #FFFFFF;
+  --sahra-accent-on-surface: var(--sahra-terracotta-dark);
   --sahra-premium: var(--sahra-gold);
   --sahra-line: var(--sahra-border);
   --sahra-font-latin: var(--font-poppins),-apple-system,BlinkMacSystemFont,sans-serif;
@@ -84,6 +86,7 @@
   --sahra-success-on-tint: #2B452D;
   --sahra-warning-on-tint: #55391C;
   --sahra-error-on-tint: #6D2819;
+  --sahra-accent-on-tint: #6B2717;
 }
 
 /* Night is a SECTION rhythm on this site, not a toggle (decision 2026-09-10 §5). */
@@ -94,6 +97,8 @@
   --sahra-text-body: var(--sahra-night-text);
   --sahra-text-soft: var(--sahra-night-text-soft);
   --sahra-text-faint: var(--sahra-night-text-faint);
+  --sahra-accent-fill: var(--sahra-terracotta);
+  --sahra-accent-on-surface: var(--sahra-terracotta-light);
   --sahra-line: var(--sahra-night-border);
   --sahra-success: #71A775;
   --sahra-warning: #C79054;
@@ -101,6 +106,7 @@
   --sahra-success-on-tint: #BDD6BE;
   --sahra-warning-on-tint: #E6CDB1;
   --sahra-error-on-tint: #F0C7BF;
+  --sahra-accent-on-tint: #F8C6B8;
 }
 
 /* Tailwind defaults OFF. What is not a token is not a class. Breakpoints,
@@ -161,8 +167,10 @@
   --color-soft: var(--sahra-text-soft);
   --color-faint: var(--sahra-text-faint);
   --color-accent: var(--sahra-accent);
+  --color-accent-fill: var(--sahra-accent-fill);
   --color-accent-hover: var(--sahra-accent-hover);
   --color-accent-contrast: var(--sahra-accent-contrast);
+  --color-accent-on-surface: var(--sahra-accent-on-surface);
   --color-premium: var(--sahra-premium);
   --color-line: var(--sahra-line);
   --font-latin: var(--sahra-font-latin);
@@ -210,4 +218,5 @@
   --color-success-on-tint: var(--sahra-success-on-tint);
   --color-warning-on-tint: var(--sahra-warning-on-tint);
   --color-error-on-tint: var(--sahra-error-on-tint);
+  --color-accent-on-tint: var(--sahra-accent-on-tint);
 }

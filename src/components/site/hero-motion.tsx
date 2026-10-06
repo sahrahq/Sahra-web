@@ -1,30 +1,8 @@
 'use client';
 
-// The hero's motion — the FIRST editorial-tier code on the site (decision
-// 2026-09-10 §5). Loaded lazily by hero-motion-gate.tsx, never on the
-// first-load path, never for a reduced-motion reader.
-//
-//   - headline: SplitText, WORDS not characters — splitting Arabic into
-//     characters breaks its joining; words are safe in both scripts and read
-//     better in Latin too. No mask: see the note at the split.
-//   - supporting line and CTAs follow, staggered.
-//   - the phone rises in with them; it does NOT float or drift once settled.
-//     An earlier version bobbed it up and down forever and drifted it on
-//     scroll — on a hand-drawn artboard phone, cropped by the band's edge, a
-//     phone that never stops moving reads as a glitch, not as life (found
-//     2026-09-10). It gets one entrance, then holds still.
-//
-// gsap.matchMedia() still owns every tween even though the gate already
-// checked the preference: if the reader turns reduced motion on mid-page,
-// GSAP reverts everything to the resting state on its own.
-//
-// It marks the section `data-motion="on"` once the timelines exist, which is
-// how tests/hero.spec.ts distinguishes "motion happened and finished" from
-// "motion never loaded" — both end with every word at opacity 1.
-//
-// Known cost: the static HTML paints the headline before this runs, then
-// SplitText hides and reveals it. A brief re-reveal on a slow connection, not
-// a missing headline.
+// Hero motion, loaded lazily by hero-motion-gate.tsx (decision 2026-09-10 §5). The headline splits
+// into words, since characters break Arabic joining; the phone rises in once, then holds still.
+// `data-motion="on"` lets tests/hero.spec.ts tell "finished" from "never loaded".
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 import { useGSAP } from '@gsap/react';
@@ -42,11 +20,8 @@ export function HeroMotionImpl() {
 
     const mm = gsap.matchMedia();
     mm.add('(prefers-reduced-motion: no-preference)', () => {
-      // NO MASK. `mask: 'words'` wraps each word in an overflow-clipped box the
-      // exact height of the line, and Reem Kufi's tall forms and Newsreader's
-      // descenders both reach past that box — measured 2026-09-10: the resting
-      // headline was clipped in Arabic at 1280 and in English at 380. The words
-      // rise and fade in instead; nothing is ever clipped in either script.
+      // No `mask: 'words'`: its clip box is one line tall, and Reem Kufi's tall forms and
+      // Newsreader's descenders reach past it. tests/hero.spec.ts fails on a clipping wrapper.
       const split = SplitText.create(headline, {
         type: 'words',
         autoSplit: true,

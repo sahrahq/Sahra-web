@@ -1,17 +1,6 @@
-// Section 8 — for restaurants: the artboard's second Night band. Centred copy
-// with the 48px headline (`text-display-md`, the artboard's size), one filled
-// "Partner with SAHRA", and under it a window — top corners rounded, no bottom
-// edge — with the operator view drawn in HTML and cut by the band's end.
-//
-// THE WINDOW IS THE ARTBOARD'S DRAWING: sidebar, title, walk-in, four KPIs,
-// three bookings, the floor grid — its strings from the message files, its
-// figures here, every colour a token. Owner's decision, 2026-09-10 ("keep them
-// as they are in the Claude Design file"). Below md the sidebar and the floor
-// plan fold away and the middle column carries the window.
-//
-// The CTA goes to the FAQ answer about joining (#partner): the artboard's
-// `#partner` had no target, and the contact channel is an open question
-// (decision §8).
+// For restaurants: the artboard's operator window, drawn in HTML at the owner's direction
+// (decision 2026-09-10 §6), strings from the message files and figures here. The CTA goes to the
+// FAQ's joining answer (#partner) until a partner channel exists (§8).
 import Image from 'next/image';
 import { Mashrabiya } from '@/components/brand/mashrabiya';
 import { type Locale, pathFor } from '@/i18n/locales';
@@ -69,11 +58,8 @@ const SIDEBAR = ['sbFloor', 'sbGuests', 'sbReviews', 'sbMenu'] as const;
 export function Operator({ locale, copy, brand }: OperatorProps) {
   const here = pathFor(locale, '/');
   const d = copy.dash;
-  // No top margin, unlike the other bands: the one above this is now the
-  // full-bleed Cairo map (where.tsx), Night to Night, and a margin there left
-  // a 96px stripe of the cream page between two dark bands — a mistake, not a
-  // separator. The map's own vignette fades its bottom edge into this band
-  // instead; `pt-24` still keeps the content clear of the seam.
+  // No top margin: the Night map band above fades into this one, and a margin would show a
+  // stripe of the cream page between them.
   return (
     <section
       id="restaurants"
@@ -95,7 +81,7 @@ export function Operator({ locale, copy, brand }: OperatorProps) {
           <p className="mt-5 max-w-xl text-body-l leading-normal text-pretty text-soft">{copy.lead}</p>
           <a
             href={`${here}#partner`}
-            className="mt-8 inline-flex min-h-12 items-center justify-center rounded-pill bg-accent px-6 text-body-l font-semibold whitespace-nowrap text-accent-contrast transition-transform duration-150 ease-out hover:bg-accent-hover hover:text-accent-contrast active:scale-98"
+            className="mt-8 inline-flex min-h-12 items-center justify-center rounded-pill bg-accent-fill px-6 text-body-l font-semibold whitespace-nowrap text-accent-contrast transition-transform duration-150 ease-out hover:bg-accent hover:text-accent-contrast active:scale-98"
           >
             {copy.cta}
           </a>
@@ -132,7 +118,7 @@ export function Operator({ locale, copy, brand }: OperatorProps) {
                 <p className="font-display-script text-h3 font-semibold text-body">{d.title}</p>
                 <p className="text-caption text-faint">{d.sub}</p>
               </div>
-              <span className="rounded-pill bg-accent px-3 py-2 text-caption font-semibold whitespace-nowrap text-accent-contrast">
+              <span className="rounded-pill bg-accent-fill px-3 py-2 text-caption font-semibold whitespace-nowrap text-accent-contrast">
                 {d.walkIn}
               </span>
             </div>
@@ -153,13 +139,8 @@ export function Operator({ locale, copy, brand }: OperatorProps) {
                   <span className="w-12 shrink-0 font-display-script text-body-l font-semibold text-body">
                     {b.time}
                   </span>
-                  {/* No avatar: a plain coloured circle with no guest photo behind
-                      it read as a broken image placeholder, not a design choice
-                      (reported 2026-09-10) — there is no photo for it to hold,
-                      here or anywhere a real guest's avatar would need one, so
-                      it is gone rather than faked. The table code is still the
-                      first to go on a narrow window, so the guest's name — the
-                      one thing worth reading here — keeps the room. */}
+                  {/* No avatar: there is no guest photo, and an empty circle read as a broken
+                      image. The table code hides first when narrow, so the name keeps the room. */}
                   <span className="min-w-0 flex-1 truncate text-body-m font-semibold text-body">
                     {d[b.name]}
                   </span>

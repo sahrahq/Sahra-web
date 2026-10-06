@@ -1,29 +1,6 @@
-// Section 7 — where, composed the way the owner's second Claude Design export
-// ("SAHRA Cairo Map") draws it: the map is the WHOLE BAND, edge to edge, and
-// the copy floats over it on a Night card (owner, 2026-09-11 — "make it this
-// shape, taking the whole space"). It replaces the 5/7 grid this section had,
-// where the map was a panel in the right-hand cell.
-//
-// The export reserves ~500px of fit padding on the card's side so no pin ever
-// lands under the copy; cairo-map.tsx measures THIS card (`data-map-reserve`)
-// rather than assuming a width, because ours is 480px at 1280 and the page
-// gutter grows past that.
-//
-// Below md a card cannot float over a ~380px map without hiding it, so the
-// same two things stack: the copy, then a full-bleed map strip under it.
-//
-// NOTHING OF THE MAP'S OWN IS DRAWN IN THE BAND'S CORNERS — no attribution
-// widget, and since 2026-09-11 no credit caption either; the owner asked
-// three times for that corner to be clean. The credit those tiles are
-// licensed on the condition of still exists: it is one line in the site
-// footer (footer.tsx), where a reader looks for credits. Covering it, which
-// is what was asked for first, would be removing it with extra steps.
-//
-// The lattice and the vignette are the export's own two overlays — they sit
-// above the tiles (and, as in the export, above the pins: Leaflet's panes are
-// all inside one z-400 stacking context, so a z-499 sibling clears them) and
-// give the band's edges a fade instead of a hard rectangle. `.where-map` is
-// z-0 so both stay behind the card.
+// Where, as the "SAHRA Cairo Map" export draws it: the map fills the band and the copy floats over
+// it on a Night card, which cairo-map.tsx measures (`data-map-reserve`); below md they stack. The
+// map's credit is in the footer, not on the band. The lattice and vignette overlay tiles and pins.
 import { Mashrabiya } from '@/components/brand/mashrabiya';
 import { CairoMapGate } from '@/components/site/cairo-map-gate';
 import { MapLegend } from '@/components/site/map-legend';
@@ -35,7 +12,7 @@ export interface WhereProps {
   copy: Messages['where'];
 }
 
-/** Positions on the FALLBACK panel, as fractions of its width and height. */
+/** Positions on the fallback panel, as fractions of its width and height. */
 const PINS = [
   { key: 'zamalek', x: '38%', y: '38%' },
   { key: 'maadi', x: '46%', y: '78%' },
@@ -93,10 +70,8 @@ export function Where({ locale, copy }: WhereProps) {
           ))}
         </ul>
         <CairoMapGate locale={locale} copy={copy} />
-        {/* 0.035, not the export's 0.07: the export strokes its lattice at
-            half alpha and then fades the layer, so 0.07 of a half-alpha
-            drawing is what it actually paints. At the full 0.07 ours read as
-            a visible grid laid over Cairo. */}
+        {/* 0.035, not the export's 0.07: the export strokes at half alpha, ours at full (the
+            colour is a token utility), so this paints the same texture. */}
         <Mashrabiya className="where-lattice text-body" opacity={0.035} />
         <div className="map-vignette" aria-hidden="true" />
       </div>

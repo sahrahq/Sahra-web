@@ -1,28 +1,6 @@
-// WCAG contrast of an element's own colour against what is actually painted
-// behind it, sampled at the browser's own paint order rather than the DOM's
-// ancestor chain.
-//
-// Two things make this harder than reading `color` and `background-color`:
-//
-// 1. A caption on a photo sits on a shade div (`.photo-shade`/
-//    `.photo-shade-strong` in globals.css) that is a SIBLING, stacked on top
-//    of the photo with absolute positioning — not an ancestor of the caption
-//    text. Walking `parentElement` can never see a sibling's background, so
-//    an ancestor walk goes straight past the shade to the card's own pale
-//    fallback colour (found 2026-09-10 on the venues cards).
-//    `elementsFromPoint` asks the browser what is actually stacked at the
-//    text's own position, in real paint order, regardless of DOM shape.
-//
-// 2. The shade is `color-mix(in srgb, var(--sahra-night) 78%, transparent)`
-//    INSIDE a `linear-gradient(...)`. Chromium does not flatten `color-mix()`
-//    to a plain `rgba(...)` inside a gradient's computed `background-image`
-//    string the way it does for a bare `background-color` — it stays as
-//    `color-mix(in srgb, rgb(26, 19, 16) 78%, transparent)` literally, which
-//    a regex for `rgba?\(...\)` does not match, so it was silently ignored
-//    (every run measured the SAME wrong 1.136, animation or not — the tell
-//    that this was a parsing gap, not a timing one). A 2D canvas's
-//    `fillStyle` setter accepts and normalises any valid CSS colour,
-//    `color-mix()` included, so it does the resolving instead of a regex.
+// WCAG contrast of an element's colour against what is painted behind it, read in paint order with
+// `elementsFromPoint`: a caption's shade is a sibling, which no ancestor walk sees. Computed
+// gradients keep `color-mix()` unflattened, so colours resolve through a canvas `fillStyle`.
 import type { Locator } from '@playwright/test';
 
 export async function contrast(el: Locator): Promise<number> {
@@ -33,7 +11,7 @@ export async function contrast(el: Locator): Promise<number> {
       const [r, g, b, a = '1'] = m;
       return [Number(r), Number(g), Number(b), Number(a)];
     };
-    // A canvas 2D context normalises ANY valid CSS colour function
+    // A canvas 2D context normalises any valid CSS colour function
     // (rgb/hsl/color-mix/oklch…) to `#rrggbb` or `rgba(...)` on readback.
     const ctx = document.createElement('canvas').getContext('2d')!;
     const normalise = (token: string): [number, number, number, number] | null => {
@@ -92,9 +70,8 @@ export async function contrast(el: Locator): Promise<number> {
     const start = stack.indexOf(node as Element);
     const layers = (start >= 0 ? stack.slice(start + 1) : stack) as HTMLElement[];
 
-    // Walk from the layer nearest the text outward, collecting every
-    // translucent layer (solid or gradient) until an OPAQUE solid is found —
-    // that opaque colour is the base everything above it is painted onto.
+    // Walk outward from the layer nearest the text, collecting translucent layers (solid or
+    // gradient) until an opaque solid: the base everything above it is painted onto.
     const translucent: [number, number, number, number][] = [];
     let base: [number, number, number] | null = null;
     for (const layer of layers) {

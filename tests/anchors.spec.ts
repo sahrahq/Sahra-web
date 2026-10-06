@@ -1,13 +1,6 @@
-// Dead anchors have a deadline, not a comment.
-//
-// Every same-page anchor on the landing — in the nav, the hero CTAs, the
-// footer, anywhere — is listed here with the section that gives it a target.
-// The whole artboard is built, so every entry is landed; the `landed` flag
-// stays so a future section can be listed before it exists.
-//
-// The first test pins the SET: a new same-page link that is not listed here
-// fails, so nothing can point at nothing unannounced. `href="#"` in particular
-// (a link to nothing, the artboard's store badges) can never ship.
+// Every same-page anchor on the landing, with the section that gives it a target. The first test
+// pins the set, so an unlisted link or an `href="#"` fails; `landed` lets a link be listed before
+// its section exists.
 import { expect, test } from './fixtures';
 
 const ANCHORS = [

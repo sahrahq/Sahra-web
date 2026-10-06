@@ -1,20 +1,6 @@
-// The store badges, as the artboard draws them: monochrome ink glyphs on cream
-// in the closer (two lines: "Download on the / App Store", "Get it on / Google
-// Play"), outlined and compact on Night in the footer. In palette on purpose,
-// per the artboard's note, to be swapped for the official badge assets when the
-// listings exist.
-//
-// THE PLAY GLYPH IS NOT THE ARTBOARD'S. Its path is the official four-piece
-// Google Play mark, built to be filled in four different colours; filled as
-// one solid colour the seams between the pieces show as a stray mark in the
-// middle (seen 2026-09-10). This is a single closed triangle instead — same
-// "play" meaning, no seam, and correct for a one-colour glyph.
-//
-// NOT LINKS YET. There is no listing on either store (decision 2026-09-10 §8),
-// so the badge is a plain element — `href="#"` is a link to nothing and
-// tests/anchors.spec.ts refuses it. Both badges are shown because the owner
-// asked for the artboard as drawn (2026-09-10: "where is the App Store, like
-// these"); the store URLs are theirs to supply.
+// Store badges in palette, as the artboard draws them, until the official assets replace them.
+// Not links: neither store has a listing (decision 2026-09-10 §8), and tests/anchors.spec.ts
+// refuses `href="#"`.
 import type { Messages } from '@/i18n/messages';
 
 export type Store = 'apple' | 'play';

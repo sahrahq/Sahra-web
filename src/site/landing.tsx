@@ -1,19 +1,6 @@
-// The landing page body: the owner's Claude Design artboard
-// (apps/web/claude design/SAHRA Landing - Desktop (standalone).html), made
-// responsive, section by section, in this order — its own band map:
-//
-//   Night   · nav + hero
-//   Light   · two audiences, how it works
-//   Sunken  · what you get
-//   Light   · the nights it is for, where
-//   Night   · for restaurants
-//   Light   · FAQ
-//   Night   · get the app, footer
-//
-// Each section is its own component under src/components/site/ and says at
-// its top where it departs from the artboard and why (every departure is a
-// truthfulness rule from decision 2026-09-10 §6, or a real capture standing
-// where the artboard drew a stand-in).
+// The landing: the owner's Claude Design artboard, made responsive in its band order
+// (`claude design/SAHRA Landing - Desktop (standalone).html`). Where the page departs from it,
+// and why, is the table in decision 2026-09-10 §6.
 import { Faq } from '@/components/site/faq';
 import { Features } from '@/components/site/features';
 import { SiteFooter } from '@/components/site/footer';

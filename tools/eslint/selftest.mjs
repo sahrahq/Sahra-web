@@ -1,12 +1,6 @@
-// RED-FIRST FOR THE LINTER ITSELF.
-//
-// Runs the real eslint.config.mjs over two fixtures and fails unless:
-//   - every rule listed in EXPECTED fires at least once on fixtures/violations.tsx
-//   - nothing at all fires on fixtures/clean.tsx
-//
-// This is what makes "the lint would catch that" a measurement rather than a
-// belief. Delete a rule, break a regex, wipe the Tailwind entryPoint setting —
-// this goes red before CI can go green. Run: node tools/eslint/selftest.mjs
+// Runs eslint.config.mjs over the fixtures and fails unless every rule in EXPECTED fires on
+// fixtures/violations.tsx and no sahra or Tailwind rule fires on fixtures/clean.tsx, so "the lint
+// would catch that" is measured. Run: node tools/eslint/selftest.mjs
 import { ESLint } from 'eslint';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -25,8 +19,7 @@ const EXPECTED = [
 const eslint = new ESLint({
   cwd: web,
   overrideConfigFile: resolve(web, 'eslint.config.mjs'),
-  // The fixtures are ignored by `pnpm lint` on purpose; this run is the one
-  // place that reads them.
+  // `pnpm lint` ignores the fixtures; this run is the one place that reads them.
   ignore: false,
 });
 

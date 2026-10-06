@@ -1,17 +1,6 @@
-// Section 11 — the footer, as the artboard draws it: Night, a hairline above,
-// 2:1:1:1 — mark, tagline and the two outlined store badges, then three
-// columns of links under overlines, the last with the language switch.
-//
-// Every link has a target: the landing's own sections, the two legal pages
-// (stubs that say they are stubs, decision 2026-09-10 §8), and the other
-// language. "Partner with SAHRA" goes to the FAQ answer about joining
-// (#partner); "Operator preview" to the restaurants band. The badges are the
-// same not-yet-links as the closer's (store-badge.tsx).
-//
-// Every one of these is next/link, including the hash-only ones — see the
-// note in nav.tsx: this footer renders on /privacy and /terms too, where a
-// hash link is a real cross-document navigation, and Next's router is what
-// makes that reliable regardless of how a static host resolves the path.
+// The footer, as the artboard draws it. Every link has a target, and each is next/link, hashes
+// too, since the footer also renders on /privacy and /terms (see nav.tsx). The store badges are
+// not links yet (store-badge.tsx).
 import Image from 'next/image';
 import Link from 'next/link';
 import { GET_APP } from '@/site/anchors';
@@ -48,11 +37,8 @@ export function SiteFooter({ locale, path, m }: SiteFooterProps) {
             </span>
           </Link>
           <p className="mt-4 max-w-2xs text-body-m leading-normal text-faint">{m.footer.tagline}</p>
-          {/* The "where" band draws OpenStreetMap tiles, whose licence requires
-              the credit, and the owner wants the map's own corners clean — so
-              the credit lives here, in the place a reader looks for credits,
-              rather than over the map (decision 2026-09-10 §6 follow-up). Not
-              a link, for the same reason the store badges are not. */}
+          {/* OpenStreetMap's licence requires this credit for the map's tiles; it sits here, where
+              a reader looks for credits, so the map stays clean (decision 2026-09-10 §6). */}
           <p className="mt-3 text-overline text-faint">{m.footer.mapCredit}</p>
           <div className="mt-6 flex flex-wrap gap-2">
             <StoreBadge copy={m.close} store="apple" variant="outline" />

@@ -1,12 +1,8 @@
 import type { NextConfig } from 'next';
 
-// A static site. `output: 'export'` writes plain HTML per route into out/ —
-// no server, nothing to fall over at 8pm on a Thursday (decision 2026-09-10 §3).
-//
-// Images: no optimiser in a static export, so src/image-loader.ts maps a
-// responsive base path to the pre-generated WebP widths below (the hero) and
-// passes plain files through unchanged (logos, app captures). deviceSizes is
-// the ONE list of widths; tools/hero-image.ts writes exactly these.
+// Plain HTML per route in out/, with no server to fall over (decision 2026-09-10 §3). A static
+// export has no image optimiser, so src/image-loader.ts maps a base path to one WebP per
+// deviceSizes width; keep them equal to WIDTHS in tools/hero-image.ts, which writes those files.
 const nextConfig: NextConfig = {
   output: 'export',
   reactStrictMode: true,

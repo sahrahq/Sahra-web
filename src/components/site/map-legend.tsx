@@ -1,8 +1,5 @@
-// The five neighbourhoods as chips on the copy card, where the owner's Cairo
-// Map export puts them — and the only place the names appear below md, since
-// cairo-map.tsx hides its floating pin labels there (globals.css,
-// `.map-pin-label`): Cairo's east-west spread needs a zoom small enough that
-// five fixed-width label pills land on top of each other in a ~380px strip.
+// The neighbourhoods as chips on the copy card, as the Cairo Map export draws them. Below md they
+// are the only names shown: globals.css hides `.map-pin-label` there, as five pills would overlap.
 import type { Messages } from '@/i18n/messages';
 
 const HOODS = ['zamalek', 'maadi', 'heliopolis', 'newCairo', 'sheikhZayed'] as const;

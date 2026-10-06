@@ -1,8 +1,5 @@
-// §1 — the nav renders in both locales, from the static export.
-//
-// Copy is read from the message files, never typed here: a test that hardcodes
-// "Diners" breaks every time the (unreviewed) copy is edited, and its job is to
-// outlive that. Direction and the language switch are asserted from the DOM.
+// The nav in both locales, from the static export. Copy comes from the message files, so editing
+// the (unreviewed) copy does not break the test; direction and the switch are read from the DOM.
 import { expect, test } from './fixtures';
 import ar from '../messages/ar.json' with { type: 'json' };
 import en from '../messages/en.json' with { type: 'json' };

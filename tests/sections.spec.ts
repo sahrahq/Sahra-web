@@ -1,38 +1,20 @@
-// §5–§11 — what you get, venues, where, for restaurants, FAQ, get the app, the
-// footer — in both locales, from the static export.
-//
-// Alongside "is it there", the pins that keep the page honest about what it
-// is: the store badges are not links until the listings exist (never `#`), the
-// drawn screens carry the message files' strings, every photo has pixels.
+// What you get through the footer, both locales: each part is there, and the page stays honest
+// (the badges are not links, drawn screens use the message files' strings, every photo decodes).
 import { expect, test } from './fixtures';
 import type { Locator } from '@playwright/test';
 import ar from '../messages/ar.json' with { type: 'json' };
 import en from '../messages/en.json' with { type: 'json' };
 import { contrast } from './helpers/contrast';
+import { expectImagesDecoded } from './helpers/images';
 
 const LOCALES = [
   { locale: 'en', path: '/', m: en },
   { locale: 'ar', path: '/ar', m: ar },
 ] as const;
 
-/**
- * Every card, line and photo caption in these sections is `[data-reveal]`:
- * hidden (GSAP `autoAlpha`, which sets `visibility:hidden`, not just opacity)
- * until its OWN ScrollTrigger crosses 88% of the viewport. Scrolling only the
- * section's TOP into view does not guarantee its LOWEST reveal group has —
- * the venues cards' contrast measured 1.1 (white text on the section's own
- * cream, not the photo shade) because the heading was still `visibility:
- * hidden` when read, and `elementsFromPoint` cannot see a hidden element at
- * all (found 2026-09-10; the same gap hid a whole card from a role query on
- * `features`, and the restaurants half of §3 from one on `two-audiences`).
- * Scrolling the LAST `[data-reveal]` descendant into view crosses every
- * trigger above it too — to the CENTRE of the viewport, not merely into it:
- * `scrollIntoViewIfNeeded` on an element already peeking in at the bottom
- * scrolls the least it can, which leaves that element's top a few pixels
- * either side of the 88% line (found 2026-09-11: the fifth feature card, 102px
- * tall in Arabic, landed at 86.5% — past the line by layout, and not past it
- * at all once the module had measured it with its own 24px offset applied).
- */
+/** Each `[data-reveal]` is `visibility:hidden` until its own trigger fires, hiding it from role
+ * queries and `elementsFromPoint`. Centring the section's last one crosses every trigger above it;
+ * `scrollIntoViewIfNeeded` can stop a few px either side of the 88% line. */
 async function revealAll(section: Locator) {
   await section
     .locator('[data-reveal]')
@@ -74,9 +56,7 @@ for (const { locale, path, m } of LOCALES) {
       for (const key of ['v5', 'v6', 'v7', 'v8'] as const) {
         await expect(section.getByText(m.venues[key], { exact: true })).toBeAttached();
       }
-      for (const img of await section.locator('img').all()) {
-        expect(await img.evaluate((el) => (el as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
-      }
+      await expectImagesDecoded(section);
       await expect(section.getByText(m.venues.more)).toBeAttached();
       // Cream caption on the shade: legible on every picture.
       for (const h of await section.getByRole('heading', { level: 3 }).all()) {
@@ -91,10 +71,8 @@ for (const { locale, path, m } of LOCALES) {
       await section.scrollIntoViewIfNeeded();
       await revealAll(section);
       await expect(section.getByRole('heading', { level: 2, name: m.where.title })).toBeVisible();
-      // The static fallback panel — always in the DOM, covered once the real
-      // map mounts (never removed, so a no-JS reader still gets a real
-      // picture). Its own list, scoped: the card's chips repeat the same five
-      // names, and the real map's labels do too.
+      // The static fallback panel stays in the DOM under the real map. Scoped to its own list:
+      // the card's chips and the map's labels repeat the same five names.
       const fallback = section.locator('ul[dir="ltr"]');
       await expect(fallback.getByRole('listitem')).toHaveCount(5);
       for (const key of ['zamalek', 'maadi', 'heliopolis', 'newCairo', 'sheikhZayed'] as const) {
@@ -105,24 +83,16 @@ for (const { locale, path, m } of LOCALES) {
       expect(await x(m.where.sheikhZayed)).toBeLessThan(await x(m.where.zamalek));
       expect(await x(m.where.zamalek)).toBeLessThan(await x(m.where.newCairo));
 
-      // The real map (cairo-map.tsx): a lazy chunk, so give it a moment to
-      // mount. Its own tile requests are mocked (tests/fixtures.ts) — this
-      // only asserts the map's structure (Leaflet's container, the five
-      // divIcon markers with their names and counts), never a tile image.
+      // The real map is a lazy chunk with stubbed tiles (tests/fixtures.ts), so this asserts
+      // Leaflet's container and the markers, never a tile image.
       const map = section.locator('[role="img"]');
       await expect(map).toHaveAttribute('aria-label', m.where.mapLabel, { timeout: 10_000 });
-      // Leaflet adds its own class to the SAME element it was given, not to a
-      // child — a descendant search for it always finds zero (found chasing
-      // this test's own false failure, not a product bug).
+      // Leaflet adds its class to the element it was given, not to a child.
       await expect(map).toHaveClass(/leaflet-container/, { timeout: 10_000 });
       const phone = testInfo.project.name === 'phone';
       for (const key of ['zamalek', 'maadi', 'heliopolis', 'newCairo', 'sheikhZayed'] as const) {
-        // A label is the name and nothing else — `exact` holds it to that, so
-        // the venue counts the export drew under each name (numbers nothing in
-        // the product can count, removed 2026-09-11) cannot come back by
-        // accident. Below md the map shows only pins — its labels are hidden
-        // by CSS (five fixed-width pills do not fit a ~380px strip), and the
-        // card's chips carry the five names there.
+        // `exact`: a label is the name alone, so the export's venue counts cannot creep back.
+        // Below md the labels are hidden by CSS and the card's chips carry the names.
         const label = map.getByText(m.where[key], { exact: true });
         if (phone) await expect(label).toBeAttached();
         else await expect(label).toBeVisible();
@@ -136,12 +106,8 @@ for (const { locale, path, m } of LOCALES) {
       }
 
       if (!phone) {
-        // The copy floats OVER the map from md up, so the map has to fit
-        // itself around the card (cairo-map.tsx measures it) and still leave
-        // each pin's label room to open. Both halves of that broke at 1440 on
-        // the day it was built: "New Cairo" ran off the end of the band, and
-        // in Arabic every label opened towards the card — the side the card is
-        // on — instead of away from it, landing underneath.
+        // From md the copy card floats over the map: every label must stay inside the band and
+        // clear of the card, which also catches Arabic labels opening towards the card.
         const band = (await map.boundingBox())!;
         const card = (await section.locator('[data-map-reserve]').boundingBox())!;
         for (const key of ['zamalek', 'maadi', 'heliopolis', 'newCairo', 'sheikhZayed'] as const) {
@@ -181,13 +147,8 @@ for (const { locale, path, m } of LOCALES) {
       await expect(dash.getByText(m.operator.dash.k1)).toBeVisible();
       await expect(dash.getByText(m.operator.dash.b1Name)).toBeVisible();
       if (testInfo.project.name !== 'phone') {
-        // On md+ the window's height is fixed and shorter than its content, so
-        // it is cut by the band: it ends where the band ends. Below md the
-        // sidebar and floor plan are hidden and the window sizes to its own
-        // content instead (a fixed height there clipped the KPI grid and the
-        // bookings list — found 2026-09-10), so this geometry is a desktop
-        // claim only. Let its own reveal (data-reveal on the dash) finish
-        // first — mid-tween it is still offset by its own translateY.
+        // From md the window has a fixed height and ends where the band ends; below md it sizes to
+        // its content. Wait out its own reveal first: mid-tween it is offset by its translateY.
         await page.waitForTimeout(1000);
         const d = (await dash.boundingBox())!;
         const s = (await section.boundingBox())!;
@@ -206,8 +167,7 @@ for (const { locale, path, m } of LOCALES) {
       await expect(section.getByRole('heading', { level: 2, name: m.faq.title })).toBeVisible();
       const items = section.locator('details');
       await expect(items).toHaveCount(5);
-      // Every question is on screen; every answer starts closed — a FAQ, not a
-      // page of already-open answers (seen 2026-09-10, before this test existed).
+      // Every question is on screen, and every answer starts closed.
       for (const key of ['q1', 'q2', 'q3', 'q4', 'q5'] as const) {
         await expect(section.getByText(m.faq[key].q)).toBeVisible();
         await expect(section.getByText(m.faq[key].a)).toBeHidden();
@@ -252,10 +212,7 @@ for (const { locale, path, m } of LOCALES) {
       const footer = page.getByRole('contentinfo');
       await footer.scrollIntoViewIfNeeded();
       await expect(footer.getByText(m.footer.tagline)).toBeVisible();
-      // The "where" band's tiles are licensed on the condition that they are
-      // credited, and the owner wants the map's own corners clean — so the
-      // credit lives here. Asserted so that "clean corner" cannot quietly
-      // become "no credit anywhere" in a later pass.
+      // The map's tiles must be credited, and the credit lives here rather than on the map.
       await expect(footer.getByText(m.footer.mapCredit)).toBeVisible();
       await expect(footer.locator('[data-store-badge]')).toHaveCount(2);
       await expect(footer.getByRole('link', { name: m.footer.how })).toHaveAttribute(

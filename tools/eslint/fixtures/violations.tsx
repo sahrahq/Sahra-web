@@ -1,8 +1,5 @@
-// PLANTED VIOLATIONS. Every rule in tools/eslint/sahra-rules.mjs and the two
-// Tailwind rules in eslint.config.mjs must fire on this file, or
-// tools/eslint/selftest.mjs fails. This file is excluded from `pnpm lint`.
-//
-// The comment above each line names the rule expected to fire on it.
+// Planted violations: each rule in selftest.mjs's EXPECTED must fire on this file, which
+// `pnpm lint` ignores. The comment above each line names the rule expected to fire on it.
 
 export function Violations() {
   return (

@@ -1,20 +1,6 @@
-// Section 2 — the hero, from the owner's Claude Design artboard: a Night band,
-// the lattice strongest at the top centre, everything centred — overline,
-// headline, one supporting line, two pills — and a phone rising out of the
-// band's bottom edge, cut by it.
-//
-// THE PHONE IS THE ARTBOARD'S. It draws the Discover screen in HTML — greeting,
-// neighbourhood, the four chips, "Available tonight", one featured card — and
-// the owner asked for exactly that (2026-09-10: "keep them as they are in the
-// Claude Design file"). Every string comes from the message files; every colour
-// from a token; the picture is the export's own (public/photos/README.md).
-//
-// TYPE. The artboard proposes `text-display-xl: 72px` for this headline; it is
-// a token now (with `text-display-md: 48px` for the restaurants band). 40 on a
-// phone, 48 from sm, 72 from lg — the Arabic headline stays on one line at each.
-//
-// This file is STATIC: a server component, the resting state of every element.
-// Motion lives in hero-motion.tsx behind the shared gate (decision §5).
+// The hero: a Night band with the artboard's drawn Discover phone rising out of its bottom edge,
+// kept drawn at the owner's direction (decision 2026-09-10 §6). A static server component; the
+// motion is hero-motion.tsx, behind the shared gate.
 import Image from 'next/image';
 import { Icon } from '@/components/brand/icon';
 import { Mashrabiya } from '@/components/brand/mashrabiya';
@@ -59,7 +45,7 @@ export function Hero({ locale, copy }: HeroProps) {
           <div data-hero-follow className="mt-8 flex flex-wrap justify-center gap-3">
             <a
               href={`${here}${GET_APP}`}
-              className={`${pill} bg-accent text-accent-contrast hover:bg-accent-hover hover:text-accent-contrast`}
+              className={`${pill} bg-accent-fill text-accent-contrast hover:bg-accent hover:text-accent-contrast`}
             >
               {copy.getApp}
             </a>
@@ -100,7 +86,7 @@ export function Hero({ locale, copy }: HeroProps) {
                 {CHIPS.map((c, i) => (
                   <span
                     key={c}
-                    className={`${chip} ${i === 0 ? 'bg-accent font-semibold text-accent-contrast' : 'border border-line bg-surface-card text-soft'}`}
+                    className={`${chip} ${i === 0 ? 'bg-accent-fill font-semibold text-accent-contrast' : 'border border-line bg-surface-card text-soft'}`}
                   >
                     {copy.phone[c]}
                   </span>
@@ -116,7 +102,7 @@ export function Hero({ locale, copy }: HeroProps) {
                 <div className="mock-card-photo relative bg-surface-sunken">
                   <Image src="/photos/mock-featured.jpg" alt="" fill sizes="340px" className="object-cover" />
                   <div className="photo-shade absolute inset-0" aria-hidden="true" />
-                  <span className="absolute start-3 top-3 rounded-pill bg-accent px-2 py-1 text-overline font-semibold uppercase tracking-overline text-accent-contrast">
+                  <span className="absolute start-3 top-3 rounded-pill bg-accent-fill px-2 py-1 text-overline font-semibold uppercase tracking-overline text-accent-contrast">
                     {copy.phone.featured}
                   </span>
                 </div>

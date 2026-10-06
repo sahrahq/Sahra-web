@@ -1,36 +1,6 @@
-// Composite a genuine app capture into the hero photograph's blank screen, and
-// export the responsive WebP set the hero serves.
-//
-//   pnpm hero:image            # writes public/hero/hero-<locale>-<width>.webp
-//
-// Inputs:  assets/hero/source.png  (AI-generated scene, blank black screen —
-//                                   see assets/hero/README.md)
-//          public/shots/<locale>/day/book.png  (captured from the app)
-// Outputs: public/hero/hero-{en,ar}-{480,800,1200,1600}.webp
-//
-// TECHNIQUE. Runs in the Chromium that Playwright already installs, on a
-// <canvas> — no image library is added to the workspace.
-//   1. The screen is FOUND, not hard-coded: the bounding box of the near-black
-//      region in the middle third of the frame. If the owner regenerates the
-//      scene, the box moves with it.
-//   2. The capture is painted ONLY WHERE THE GLASS IS BLACK. The first version
-//      clipped to the bounding rectangle and painted over the fingertips that
-//      wrap onto the screen, slicing the hand and leaving no bezel around the
-//      capture — a rectangle on a photo (seen 2026-09-10). Now a per-pixel mask
-//      is built from the source: black glass → opaque, anything else (skin,
-//      bezel, reflections) → transparent, with a short luminance ramp so the
-//      edge is anti-aliased. The capture is drawn into an offscreen layer,
-//      intersected with that mask (destination-in), then laid over the photo.
-//      The hand stays in front because it was never black; the photo itself is
-//      not edited.
-//   3. Inside the box the capture is FIT BY HEIGHT: the photographed screen is
-//      squatter (0.54) than the app's frame (0.46), so cover-fitting cropped
-//      the title bar and the confirm button. Fitting by height loses nothing;
-//      the side bands are filled with the app's page surface (a token — the
-//      capture's own background), so they vanish.
-//   4. Exported at four widths as WebP (quality 0.82) so the hero can serve
-//      the smallest file that fills the viewport; each file's bytes are
-//      printed, because an image this size can undo what lazy GSAP saved.
+// `pnpm hero:image`: composites public/shots/<locale>/day/book.png into the blank screen of
+// assets/hero/source.png as public/hero/hero-<locale>-<width>.webp, on a canvas in Playwright's
+// Chromium, so no image library is added. Unused by the hero; kept per decision 2026-09-10 §6.
 import { chromium } from '@playwright/test';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -41,6 +11,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const web = resolve(here, '..');
 const source = join(web, 'assets', 'hero', 'source.png');
 const outDir = join(web, 'public', 'hero');
+// Keep equal to `images.deviceSizes` in next.config.ts: the image loader asks for these widths.
 const WIDTHS = [480, 800, 1200, 1600];
 const LOCALES = ['en', 'ar'] as const;
 const QUALITY = 0.82;
@@ -57,7 +28,7 @@ try {
   const page = await browser.newPage();
   await page.setContent('<!doctype html><html><body></body></html>');
 
-  // 1: find the screen box, once, from the source.
+  // The screen is found, not hard-coded: the box of near-black pixels in the middle third.
   const screen = await page.evaluate(
     async ({ src, glassMax }) => {
       const img = new Image();
@@ -114,7 +85,8 @@ try {
     );
   }
 
-  // 2 + 3 + 4: composite per locale through the glass mask, export per width.
+  // Per locale and width: the capture is painted only where the glass is black, so the hand
+  // wrapping onto the screen stays in front, then exported as WebP.
   const rows: [string, number][] = [];
   for (const locale of LOCALES) {
     const shot = join(web, 'public', 'shots', locale, 'day', 'book.png');
@@ -172,8 +144,8 @@ try {
           mask.height = H;
           mask.getContext('2d')!.putImageData(maskData, 0, 0);
 
-          // The capture, fit by height into the box, on the app's own page
-          // surface, then intersected with the mask.
+          // The capture, fit by height (the photographed screen is squatter, so cover would crop
+          // it) on the app's page surface, then intersected with the mask.
           const layer = document.createElement('canvas');
           layer.width = W;
           layer.height = H;

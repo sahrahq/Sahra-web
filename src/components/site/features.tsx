@@ -1,12 +1,5 @@
-// Section 5 — what you get: the artboard's sunken band, 4:8, copy at the start
-// and a two-column grid of its five cards (the sixth cell stays empty, as
-// drawn).
-//
-// Every card is a claim with a symbol in decision 2026-09-10 §6: Arabic and
-// English (arb_test.dart, the journey walks both), real availability
-// (availability.service.ts), book without a deposit (no payments module, by
-// design), saved places (saved_screen.dart, GET /saved), booking history (the
-// past tab of my_bookings_screen.dart).
+// What you get: the artboard's sunken band of five cards. Each card is a claim whose evidence is
+// listed in decision 2026-09-10 §6.
 import type { Messages } from '@/i18n/messages';
 
 export interface FeaturesProps {

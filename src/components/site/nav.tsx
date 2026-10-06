@@ -1,42 +1,15 @@
 'use client';
 
-// Section 1 — the nav, as the owner's Claude Design artboard draws it: on the
-// Night hero band, the mark and the wordmark at the start, Diners · Restaurants
-// · FAQ in the middle in the soft night text, then the language switch as an
-// outlined pill and "Get the app" as the one filled terracotta pill.
-//
-// It OVERLAYS the hero (absolute, top of the page) so the <header> stays a
-// top-level banner landmark while the lattice runs behind it, exactly as in the
-// artboard where the nav sits inside the band. `overlay={false}` gives the
-// legal pages a plain Night strip instead.
-//
-// Anchors always point at the landing (`/#diners`, `/ar#faq`), whatever page the
-// reader is on; the language switch keeps them on the SAME page (`path`).
-//
-// EVERY LINK HERE IS next/link, not a plain <a> — including the hash-only
-// ones. From the landing itself that is the same document either way; from
-// `/privacy` or `/terms` (SiteNav renders on both) a plain `<a href="/ar#faq">`
-// is a real cross-document browser navigation, and a static host that expects
-// a trailing slash on `/ar` (several do; this repo's own preview server does
-// not) turns that into an error page instead of a scroll — found 2026-09-10 by
-// clicking "Get the app" from the privacy page. Next's router fetches the
-// target route itself, so it never asks a static file server to resolve the
-// path, and it still renders a real `<a href>` for the tests and for anyone
-// without JavaScript to fall back to.
-//
-// Chrome motion follows the DESIGN SYSTEM tier (150–200 ms, no bounce): the
-// mobile panel fades in over 150 ms and the reduced-motion rule in globals.css
-// collapses that to nothing. This is a client component only for the mobile
-// disclosure; everything it renders is in the static HTML, menu closed.
+// Every link is next/link, hashes included: from /privacy a plain `<a href="/ar#faq">` is a full
+// navigation, which a static host that wants `/ar/` turns into an error page. 'use client' is only
+// for the mobile menu; the static HTML has everything, menu closed.
 import Image from 'next/image';
 import Link from 'next/link';
 import { useId, useState } from 'react';
 import { Icon } from '@/components/brand/icon';
 import { type Locale, otherLocale, pathFor } from '@/i18n/locales';
 import type { Messages } from '@/i18n/messages';
-// Not re-exported: a client-file export used as a value in a Server Component
-// is exactly the bug src/site/anchors.ts's comment describes. Import GET_APP
-// from '@/site/anchors' directly, the same as this file does below.
+// Not re-exported: Server Components import it from src/site/anchors.ts (see the note there).
 import { GET_APP } from '@/site/anchors';
 
 export interface SiteNavProps {
@@ -66,7 +39,7 @@ export function SiteNav({ locale, path, copy, brand, overlay = true }: SiteNavPr
   const switchClass =
     'inline-flex min-h-12 items-center rounded-pill border border-line px-4 text-body-s font-semibold text-soft hover:bg-surface-card hover:text-body';
   const pillClass =
-    'inline-flex min-h-12 items-center gap-2 rounded-pill bg-accent px-5 text-body-m font-semibold text-accent-contrast transition-transform duration-150 ease-out hover:bg-accent-hover hover:text-accent-contrast active:scale-98';
+    'inline-flex min-h-12 items-center gap-2 rounded-pill bg-accent-fill px-5 text-body-m font-semibold text-accent-contrast transition-transform duration-150 ease-out hover:bg-accent hover:text-accent-contrast active:scale-98';
 
   return (
     <header
@@ -134,13 +107,8 @@ export function SiteNav({ locale, path, copy, brand, overlay = true }: SiteNavPr
         </div>
       </nav>
 
-      {/* min-h-dvh (a real Tailwind size, not an arbitrary value): the panel's
-          own content is shorter than the hero behind it, and both share the
-          same Night colour — without a floor this deep, the hero's own
-          headline and CTAs showed through right under the panel's, reading as
-          one broken overlapping block rather than a menu over a page (found
-          2026-09-10). This makes it a full-screen takeover instead, however
-          short its own two lines of links are. */}
+      {/* min-h-dvh: the panel is shorter than the Night hero behind it, and without a full-height
+          floor the hero's headline shows through under the links. */}
       <div
         id={panelId}
         hidden={!open}

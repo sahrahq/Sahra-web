@@ -1,7 +1,5 @@
-// THE FALSE-POSITIVE GUARD. Everything here is allowed and none of the sahra
-// or Tailwind rules may fire on it. A rule that fires on already-correct code
-// teaches people to silence it (ENGINEERING-STANDARDS, the docblockCallerClaims
-// lesson), so this file is the other half of the self-test.
+// The false-positive half of the self-test: everything here is allowed, and no sahra or Tailwind
+// rule may fire on it. A rule that fires on correct code teaches people to silence it.
 
 type Copy = { headline: string; logoAlt: string };
 

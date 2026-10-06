@@ -1,15 +1,6 @@
-// Parity and figures for messages/*.json — the web twin of the app's
-// arb_test.dart. Fails when:
-//   - a key exists in one locale and not the other (same shape, same nesting)
-//   - a value is empty
-//   - the Arabic file contains an Arabic-Indic digit (U+0660–U+0669, U+06F0–U+06F9)
-//   - an Arabic value has no Arabic letter in it (a string left in English is
-//     not a translation; brand names are still written in Arabic on this site)
-//   - an English value contains Arabic script, except the one key that is
-//     SUPPOSED to — the language switch label, which names the other language
-//     in that language.
-//
-//   node tools/check-messages.ts
+// `pnpm messages:check`, the web twin of arb_test.dart: fails on a key in one locale only, an empty
+// value, Arabic-Indic digits in ar.json, an Arabic value with no Arabic letter (brand names are
+// written in Arabic too) or Arabic script in en.json. The last two exempt the keys listed below.
 import { readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -37,7 +28,7 @@ const ar = read('ar');
 
 const ARABIC_INDIC = /[٠-٩۰-۹]/;
 const ARABIC_LETTER = /[؀-ۿ]/;
-// …and proper names that are the same in both languages (a store's own name is not copy).
+// The switch names the other language in it; store names and a booking code read the same in both.
 const KEYS_THAT_NAME_THE_OTHER_LANGUAGE = new Set([
   'nav.switchLocale',
   'close.appStoreName',

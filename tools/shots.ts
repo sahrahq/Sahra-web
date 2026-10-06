@@ -1,37 +1,6 @@
-// Product screenshots for the marketing site — captured from the product, never drawn.
-//
-//   node tools/shots.ts                 # everything
-//   node tools/shots.ts --skip-flutter  # operator render only
-//   node tools/shots.ts --skip-operator # app screenshots only
-//
-// 1. THE DINER APP. Drives apps/customer_app's own walk-through harness
-//    (test/journey/journey_screenshots_test.dart) with --update-goldens and the
-//    DEBUG banner off (WALKTHROUGH_BANNER=off), once in light and once with
-//    WALKTHROUGH_BRIGHTNESS=dark, in both languages, and
-//    copies four frames per run into public/shots/<locale>/<theme>/<screen>.png:
-//
-//        04-home          → discover
-//        09-venue         → venue
-//        14-slot-chosen   → book   (a time picked, so the confirm button carries it)
-//        18-confirmed     → confirmed
-//
-//    The harness is the SINGLE OWNER of what the walk looks like (its fixtures
-//    are private to it on purpose — two sets of canned responses would drift).
-//    This tool only chooses frames. Running it rewrites the committed
-//    walk-through pictures on this machine's Flutter and font stack, so it
-//    RESTORES that folder from git afterwards and refuses to finish if the
-//    restore left anything modified.
-//
-// 2. SAHRA FOR RESTAURANTS does not exist yet. The only truthful visual is the
-//    design reference, docs/design/ui_kits/operator/OperatorDashboard.jsx,
-//    rendered in headless Chromium at its documented 1100×680 card size, day and
-//    night, into public/shots/operator/{day,night}.png — labelled in
-//    docs/decisions/2026-09-10-marketing-site-in-nextjs.md §6 as a REFERENCE
-//    RENDER to be replaced by real screenshots when the app exists.
-//
-// Screenshots are not goldens: a different Flutter version changes pixels and
-// that is fine here. The Flutter that captured the committed set is printed at
-// the end so it can be written into RUNNING.md.
+// `node tools/shots.ts [--skip-flutter | --skip-operator]`: app frames from customer_app's
+// walk-through harness into public/shots/ (the harness owns the walk; `FRAMES` only picks from it),
+// and a reference render of OperatorDashboard.jsx.
 import { chromium } from '@playwright/test';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
@@ -106,9 +75,8 @@ async function captureApp(): Promise<void> {
   const left = git(['status', '--porcelain', '--', walkthrough], customerApp).trim();
   if (left !== '') throw new Error(`restore left modifications:\n${left}`);
   console.log('\nwalk-through folder restored from git; clean.');
-  // A newer or older Flutter than the one that owns pubspec.lock rewrites the
-  // lockfile and analysis_options.yaml on `pub get`. Those are NOT this tool's
-  // to revert — they are listed so nobody commits them by accident.
+  // A Flutter other than pubspec.lock's rewrites the lockfile and analysis_options.yaml on
+  // `pub get`; they are listed, not reverted, so nobody commits them by accident.
   const other = git(['status', '--porcelain', '--', '.'], customerApp).trim();
   if (other !== '') {
     console.log(`

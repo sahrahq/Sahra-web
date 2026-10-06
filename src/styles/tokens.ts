@@ -40,8 +40,10 @@ export const tokens = {
     "text-soft": "var(--sahra-ink-soft)",
     "text-faint": "var(--sahra-ink-faint-legible)",
     "accent": "var(--sahra-terracotta)",
+    "accent-fill": "var(--sahra-terracotta-dark)",
     "accent-hover": "var(--sahra-terracotta-dark)",
     "accent-contrast": "#FFFFFF",
+    "accent-on-surface": "var(--sahra-terracotta-dark)",
     "premium": "var(--sahra-gold)",
     "line": "var(--sahra-border)",
     "font-latin": "var(--font-poppins),-apple-system,BlinkMacSystemFont,sans-serif",
@@ -89,6 +91,7 @@ export const tokens = {
     "success-on-tint": "#2B452D",
     "warning-on-tint": "#55391C",
     "error-on-tint": "#6D2819",
+    "accent-on-tint": "#6B2717",
   },
   night: {
     "surface-page": "var(--sahra-night)",
@@ -97,6 +100,8 @@ export const tokens = {
     "text-body": "var(--sahra-night-text)",
     "text-soft": "var(--sahra-night-text-soft)",
     "text-faint": "var(--sahra-night-text-faint)",
+    "accent-fill": "var(--sahra-terracotta)",
+    "accent-on-surface": "var(--sahra-terracotta-light)",
     "line": "var(--sahra-night-border)",
     "success": "#71A775",
     "warning": "#C79054",
@@ -104,6 +109,7 @@ export const tokens = {
     "success-on-tint": "#BDD6BE",
     "warning-on-tint": "#E6CDB1",
     "error-on-tint": "#F0C7BF",
+    "accent-on-tint": "#F8C6B8",
   },
 } as const;
 

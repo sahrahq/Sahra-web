@@ -1,12 +1,6 @@
-// Section 4 — how it works, as the artboard draws it: a heading with its lead
-// beside it, then three sunken cards, each with a Night phone standing in it,
-// its flat foot on the card's edge, and under each the step number in
-// terracotta serif, a title and a line.
-//
-// THE THREE SCREENS ARE THE ARTBOARD'S — the mood picker, the slots, the
-// confirmation — drawn in HTML with its strings, by the owner's decision
-// (2026-09-10: "keep them as they are in the Claude Design file"). Figures
-// (the counts on the first screen) are figures, not copy, and sit here.
+// How it works: three cards, each with a drawn phone showing the artboard's own screen (the
+// owner's direction, decision 2026-09-10 §6). The first screen's counts are figures, not copy, so
+// they live here rather than in the message files.
 import { PhoneShell } from '@/components/site/phone-shell';
 import type { Messages } from '@/i18n/messages';
 
@@ -77,7 +71,7 @@ export function HowItWorks({ copy }: HowItWorksProps) {
                         </li>
                       ))}
                     </ul>
-                    <div className="mt-auto mb-6 rounded-md bg-accent py-3 text-center text-caption font-semibold text-accent-contrast">
+                    <div className="mt-auto mb-6 rounded-md bg-accent-fill py-3 text-center text-caption font-semibold text-accent-contrast">
                       {step.screen.cta}
                     </div>
                   </div>

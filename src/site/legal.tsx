@@ -1,11 +1,5 @@
-// /privacy and /terms, in both languages — stubs that SAY they are stubs.
-//
-// The footer links to them (the artboard's), the Play listing will require
-// them, and the legal text is the owner's to supply (decision 2026-09-10 §8:
-// "placeholder headings until the owner supplies the templates"; the privacy
-// page must not describe controls that do not exist). So each page is its
-// title, one honest paragraph, and the way back. Nothing here pretends to be
-// a policy.
+// /privacy and /terms: stubs that say they are stubs until the owner supplies the legal text
+// (decision 2026-09-10 §8). The privacy page must not describe controls that do not exist.
 import { Icon } from '@/components/brand/icon';
 import { SiteFooter } from '@/components/site/footer';
 import { SiteNav } from '@/components/site/nav';
@@ -27,9 +21,11 @@ export function LegalPage({ locale, kind }: { locale: Locale; kind: LegalKind })
             {copy.title}
           </h1>
           <p className="mt-6 text-body-l leading-loose text-pretty text-soft">{copy.body}</p>
+          {/* `accent-on-surface`, not `accent`: this 14px link is not large text, and `accent`
+              on the page surface is 4.45:1, under AA's 4.5:1 (tests/a11y.spec.ts). */}
           <a
             href={pathFor(locale, '/')}
-            className="mt-10 inline-flex min-h-12 items-center gap-2 text-body-m font-semibold text-accent hover:text-accent-hover"
+            className="mt-10 inline-flex min-h-12 items-center gap-2 text-body-m font-semibold text-accent-on-surface hover:text-accent"
           >
             <Icon name={locale === 'ar' ? 'arrow-right' : 'arrow-left'} size={16} />
             {m.legal.back}

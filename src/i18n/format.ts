@@ -1,9 +1,5 @@
-// Figures are Latin. All of them, everywhere (DESIGN-RULES).
-//
-// `Intl.NumberFormat('ar')` answers in Arabic-Indic digits, exactly as
-// `DateFormat.d('ar')` does in the app — and it is why reservation_copy.dart
-// looks month names up in a table. The `-u-nu-latn` extension pins the Latin
-// numbering system while keeping Arabic separators and words.
+// Figures are Latin in both locales (DESIGN-RULES). `Intl.NumberFormat('ar')` gives Arabic-Indic
+// digits; `-u-nu-latn` pins Latin digits and keeps the Arabic separators and words.
 import type { Locale } from './locales';
 
 const numberLocale: Record<Locale, string> = {

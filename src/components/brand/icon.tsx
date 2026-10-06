@@ -1,30 +1,14 @@
-// SAHRA custom icon set — ported from docs/design/components/core/Icon.jsx.
-// One uniform 1.6px line hand drawn from Cairo dining culture (tea glass,
-// mezze plate, lantern, shisha) alongside matching UI glyphs, so the whole
-// site shares one voice instead of a generic icon library.
-//
-// Two deliberate differences from the reference:
-//   - `name` is a union type, so an icon that does not exist is a COMPILE
-//     error. The reference fell back to Lucide from a CDN; a marketing page
-//     must not make a third-party request for a glyph, and a fallback that
-//     looks almost right is how the set stops growing.
-//   - Path data is rendered as real SVG children, not `dangerouslySetInnerHTML`.
-//
-// The drawings are NOT typed here. icon-paths.ts is generated from Icon.jsx by
-// tools/generate-tokens.ts and drift-checked with the tokens, so the design
-// package stays the one owner (an earlier version of this file retyped them
-// "kept in step by eye", and drifted within a day).
+// Port of docs/design/components/core/Icon.jsx; the drawings are icon-paths.ts, generated from it
+// by tools/generate-tokens.ts. An unknown `name` is a type error, not the reference's Lucide
+// fallback from a CDN: the site makes no third-party request for a glyph.
 import type { CSSProperties } from 'react';
 import { ICON_PATHS as PATHS } from './icon-paths';
 
 export type IconName = keyof typeof PATHS;
 export const iconNames = Object.keys(PATHS) as IconName[];
 
-// The reference stores markup strings; here they are parsed once into element
-// descriptions so React renders real nodes. Attributes in the source use
-// single quotes and a fixed vocabulary (d, cx, cy, r, x, y, width, height, rx,
-// stroke-dasharray) — anything else is a hard error at module load, which is
-// where a bad drawing should fail.
+// The markup strings are parsed once into shapes, so React renders real nodes rather than
+// `dangerouslySetInnerHTML`. An attribute outside ALLOWED throws at module load.
 type Shape = { tag: string; attrs: Record<string, string> };
 const ATTR = /([a-z-]+)='([^']*)'/g;
 const ELEMENT = /<(path|circle|rect)\s+([^>]*?)\/>/g;
@@ -54,7 +38,7 @@ export interface IconProps {
   size?: number;
   className?: string;
   style?: CSSProperties;
-  /** Decorative by default, exactly like the reference (`aria-hidden`). Pass a label to make it meaningful. */
+  /** Decorative (`aria-hidden`), as in the reference, unless a label is passed. */
   label?: string;
 }
 
